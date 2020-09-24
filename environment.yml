@@ -1,0 +1,23 @@
+name:
+  event_library_dev
+
+channels:
+  - conda-forge
+  - pytorch
+
+dependencies:
+  - pytorch
+  - torchvision
+  - opencv
+  - tqdm
+  - scikit-video
+  - eigen
+  - boost
+  - boost-cpp
+  - pybind11
+
+  - pip:
+      github.com:uzh-rpg/rpg_vid2e.git
+     - "--editable=git+https://github.com/uzh-rpg/rpg_vid2e.git#egg=esim_py&subdirectory=esim_py"
+
+
