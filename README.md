@@ -16,19 +16,42 @@ python -m pip install .
 
 ## Generator
 
-Example: conversion from `avi` files to `events`
+### Example: conversion from `avi` files to `events`
 ```
 python scripts/generate.py input_dir={INPUT_DIR} output_dir={OUTPUT_DIR}
 upsample=true extract=true emulate=true representation=voxel  show_debug_images=2
 
 ```
 
-Example: conversion from `png` files to `events`
+Tree:
+|- inputdir
+|-- videodir1
+
+
+|- outputdir
+|-- videodir1
+|----- part_0
+
+
+### Example: conversion from `png` files to `events`
 ```
 python scripts/generate.py frames_dir={FRAME_VIDEO_DIR} output_dir={OUTPUT_DIR}
 upsample=true extract=false emulate=true representation=voxel  show_debug_images=2
 ```
 
+Each video has a `imgs` directory, where you put the set of frames. Create a
+`fps.txt` file in each video directory where you specify the
+frame-rate of the video as a single integer number (e.g., 30)
+
+Tree:
+|- inputdir
+|-- videodir1
+|----- imgs
+|----- fps.txt
+
+|- outputdir
+|-- videodir1
+|----- part_0
 
 
 ### Parameters

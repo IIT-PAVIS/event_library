@@ -60,8 +60,8 @@ def main(cfg: DictConfig):
             output_dir = os.path.join(base_output_dir, video_struct)
             try:
                 simulator.generate(input_video_dir, output_dir, representation)
-            except:
-                print(f"Error with {input_video_dir} ")
+            except Exception as ex:
+                print(f"Error with {input_video_dir} {ex}")
                 with_errors.append(input_video_dir)
 
         print(with_errors)
