@@ -1,5 +1,4 @@
 import numpy as np
-import cv2
 from matplotlib import pyplot as plt
 
 __all__ = [
@@ -26,14 +25,6 @@ class FrameRepresentation(Representation):
     def get_size(self):
         return (self.W, self.H)
 
-    def display(self, frame_path):
-        fig, ax = plt.subplots(ncols=self.C, nrows=1, figsize=(20, 20))
-        frame = np.load(frame_path)
-        for i in range(self.C):
-            ax[i].imshow(frame[:, :, i])
-            ax[i].axis('off')
-        plt.show()
-
 
 class ConstantRepresentation(FrameRepresentation):
     def __init__(self, H, W, num_events):
@@ -48,6 +39,11 @@ class ConstantRepresentation(FrameRepresentation):
             if ind % self.num_events == 0:
                 yield event_count_frame
                 event_count_frame = np.zeros_like(event_count_frame)
+
+    def display(self, frame_path):
+        frame = np.load(frame_path)
+        plt.imshow(frame)
+        plt.show()
 
 
 class RawRepresentation(Representation):
@@ -86,3 +82,11 @@ class VoxelRepresentation(FrameRepresentation):
                 # Next frame has size self.num_events
                 end_index = min(len(events) - 1, ind + self.num_events - 1)
                 dt = events[end_index][2] - t0
+
+    def display(self, frame_path):
+        fig, ax = plt.subplots(ncols=self.C, nrows=1, figsize=(20, 20))
+        frame = np.load(frame_path)
+        for i in range(self.C):
+            ax[i].imshow(frame[:, :, i])
+            ax[i].axis('off')
+        plt.show()
