@@ -1,22 +1,19 @@
 import argparse
 import os
 from .upsampling.utils import Upsampler
+from event_library import DEVICE, SUPERSLO_CKPT
 
-import shutil
-from .config import BASE_DIR, DEVICE
-
-CKPT_FILE = os.path.join(BASE_DIR, 'generator', 'upsampling', 'checkpoint',
-                         'SuperSloMo.ckpt')
 
 
 def upsample(input_dir, output_dir, device=DEVICE):
-    if os.path.exists(output_dir) and os.path.isdir(output_dir):
-        shutil.rmtree(output_dir)
+    if os.path.exists(output_dir):
+        print("Upsampling already exists!")
+        return
 
     upsampler = Upsampler(input_dir=input_dir,
                           output_dir=output_dir,
                           device=device,
-                          ckpt_dir=CKPT_FILE)
+                          ckpt_dir=SUPERSLO_CKPT)
 
     upsampler.upsample()
 

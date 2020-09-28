@@ -1,0 +1,2 @@
+extractor:
+  _target_: event_library.generator.NTU_extractor

@@ -8,14 +8,15 @@ setuptools.setup(
     description="Event library",
     url="https://github.com/gianscarpe/event_library",
     entry_points = {
-        'console_scripts': ['recycle_for_event_camera = event_library.generator:main']
+        'console_scripts': ['recycle_for_event_camera = scripts.generate:main']
     },
     packages=setuptools.find_packages(),
     install_requires=[
         'opencv-python',
         'torch',
         'torchvision',
-        'hydra-core'
+        'hydra-core',
+        'matplotlib'
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

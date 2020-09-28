@@ -1,0 +1,16 @@
+defaults:
+  - representation: voxel
+  - vid2e: standard
+  - extractor: ntu
+
+show_debug_images: 10
+
+input_dir: 
+frames_dir:
+upsample_dir: 
+tmp_dir: ${output_dir}/tmp
+output_dir: 
+
+extract: false
+upsample: false
+emulate: false

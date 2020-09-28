@@ -12,7 +12,6 @@ class NTU_extractor:
         video_files = []
         for root, dirs, files in os.walk(input_dir):
             for f in files:
-
                 if f.endswith('.avi'):
                     video_files.append(os.path.join(root, f))
         print(f"Found n {len(video_files)} videos")
@@ -24,7 +23,7 @@ class NTU_extractor:
 
         for seq, video_file in enumerate(tqdm(video_files)):
             seq_name = os.path.basename(video_file).split(".")[0]
-            seq_dir_parents = os.path.dirname(video_file).replace(root_dir, "")
+            seq_dir_parents = video_file.replace(video_file, "").replace(root_dir, "")
 
             vcap_video = cv2.VideoCapture(video_file)
 
