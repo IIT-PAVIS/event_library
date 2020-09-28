@@ -7,9 +7,6 @@ from omegaconf import DictConfig
 import glob
 from event_library.generator.upsample import upsample
 
-# Must be set before importing torch.
-os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
-
 
 @hydra.main(config_path='../confs/generate.yaml')
 def main(cfg: DictConfig):

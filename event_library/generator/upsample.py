@@ -4,18 +4,21 @@ from .upsampling.utils import Upsampler
 from event_library import DEVICE, SUPERSLO_CKPT
 
 
-
 def upsample(input_dir, output_dir, device=DEVICE):
     if os.path.exists(output_dir):
         print("Upsampling already exists!")
         return
 
-    upsampler = Upsampler(input_dir=input_dir,
-                          output_dir=output_dir,
-                          device=device,
-                          ckpt_dir=SUPERSLO_CKPT)
-
-    upsampler.upsample()
+    try:
+        upsampler = Upsampler(input_dir=input_dir,
+                              output_dir=output_dir,
+                              device=device,
+                              ckpt_dir=SUPERSLO_CKPT)
+        upsampler.upsample()
+    except:
+        print(
+            f"Upsampling failed, but directory '{output_dir}' was created. Remove it if you need to try again "
+        )
 
 
 def get_flags():

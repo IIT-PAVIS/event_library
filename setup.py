@@ -7,9 +7,6 @@ setuptools.setup(
     author_email="gianluca@scarpellini.dev",
     description="Event library",
     url="https://github.com/gianscarpe/event_library",
-    entry_points = {
-        'console_scripts': ['recycle_for_event_camera = scripts.generate:main']
-    },
     packages=setuptools.find_packages(),
     install_requires=[
         'opencv-python',
