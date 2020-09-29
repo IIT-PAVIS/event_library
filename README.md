@@ -24,14 +24,14 @@ upsample=true extract=true emulate=true representation=voxel  show_debug_images=
 ```
 
 Tree:
-.
+```bash
 +-- inputdir
 |	+-- videodir1
 |
 +-- outputdir
 |   +-- videodir1
 |     +-- part_0
-
+```
 
 ### Example: conversion from `png` files to `events`
 ```
