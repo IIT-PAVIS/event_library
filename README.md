@@ -44,7 +44,7 @@ Each video has a `imgs` directory, where you put the set of frames. Create a
 frame-rate of the video as a single integer number (e.g., 30)
 
 Tree:
-.
+```bash
 +-- inputdir
 |     +-- videodir1
 |         +-- imgs
@@ -52,7 +52,7 @@ Tree:
 +-- outputdir
 |     +-- videodir1
 |         +-- part_0
-
+```
 
 ### Parameters
 
