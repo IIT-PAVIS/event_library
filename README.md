@@ -24,13 +24,13 @@ upsample=true extract=true emulate=true representation=voxel  show_debug_images=
 ```
 
 Tree:
-|- inputdir
-|-- videodir1
-
-
-|- outputdir
-|-- videodir1
-|----- part_0
+.
++-- inputdir
+|	+-- videodir1
+|
++-- outputdir
+|   +-- videodir1
+|     +-- part_0
 
 
 ### Example: conversion from `png` files to `events`
@@ -44,14 +44,14 @@ Each video has a `imgs` directory, where you put the set of frames. Create a
 frame-rate of the video as a single integer number (e.g., 30)
 
 Tree:
-|- inputdir
-|-- videodir1
-|----- imgs
-|----- fps.txt
-
-|- outputdir
-|-- videodir1
-|----- part_0
+.
++-- inputdir
+|     +-- videodir1
+|         +-- imgs
+|         +-- fps.txt
++-- outputdir
+|     +-- videodir1
+|         +-- part_0
 
 
 ### Parameters
