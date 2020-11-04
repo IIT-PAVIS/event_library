@@ -1,8 +1,7 @@
-representation:
-  _target_: event_library.generator.VoxelRepresentation
-  params:
-    W: 346
-    H: 260
-    C: 8
-    num_events: 7500 
-    
+# @package _group_
+_target_: event_library.generator.VoxelRepresentation
+params:
+  W: 346
+  H: 260
+  C: 8
+  num_events: 7500     

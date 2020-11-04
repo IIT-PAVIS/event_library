@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+torch = "*"
+torchvision = "*"
+hydra-core = "*"
+matplotlib = "*"
+tqdm = "*"
+esim-py = {file = "file:///home/gianlucascarpellini/dev/event_library/third_parties/esim_py-0.0.1-cp38-cp38-linux_x86_64.whl"}
+pytest = "*"
+yapf = "*"
+black = "*"
+
+[requires]
+python_version = "3.8"

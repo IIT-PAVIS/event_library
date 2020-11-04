@@ -6,9 +6,6 @@ Clone the repo:
 
 `git clone https://github.com/gianscarpe/event_library.git`
 
-Create conda env:
-`conda env create -f environment.yml`
-
 Install event_library:
 ```
 python -m pip install .

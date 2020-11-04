@@ -3,6 +3,7 @@ import os
 import numpy as np
 from tqdm import tqdm
 import glob
+import cv2
 
 
 class SimulatorWrapper(EventSimulator):
@@ -32,7 +33,8 @@ class SimulatorWrapper(EventSimulator):
         images_path = sorted(glob.glob(imgs_path))
         n_images = len(images_path)
         print(f"Start generating events for {input_dir}; n {n_images}")
-        os.makedirs(output_dir, exist_ok=True)
+        H, W, C = cv2.imread(images_path[0]).shape
+
         for i in tqdm(range(n_images // self.batch_size + 1)):
             out_part_dir = os.path.join(output_dir, f"part_{i}")
             os.makedirs(out_part_dir, exist_ok=True)
@@ -43,7 +45,7 @@ class SimulatorWrapper(EventSimulator):
                 images_input_paths, ts_input_paths)
             # representation yields frame of events
             for ind, frame in enumerate(
-                    representation.frame_generator(events)):
+                    representation.frame_generator(events, H, W, C)):
                 np.save(os.path.join(out_part_dir, f"frame{ind:07d}.npy"),
                         frame)
             del events

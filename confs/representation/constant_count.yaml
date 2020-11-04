@@ -1,8 +1,4 @@
-representation:
-  _target_: event_library.generator.ConstantRepresentation
-  params:
-    W: 346
-    H: 260
-    num_events: 7500 
-  
-  
+# @package _group_
+_target_: event_library.generator.ConstantRepresentation
+params:
+  num_events: 7500 
