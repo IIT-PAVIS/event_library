@@ -1,9 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-__all__ = [
-    'ConstantRepresentation', 'VoxelRepresentation', 'RawRepresentation'
-]
+__all__ = ["ConstantRepresentation", "VoxelRepresentation", "RawRepresentation"]
 
 
 class Representation:
@@ -15,16 +13,16 @@ class Representation:
 
 
 class FrameRepresentation(Representation):
-    def __init__(self, num_events):
+    def __init__(self, num_events: int):
         super(FrameRepresentation, self).__init__()
         self.num_events = num_events
 
 
 class ConstantRepresentation(FrameRepresentation):
-    def __init__(self, num_events):
+    def __init__(self, num_events: int):
         super(ConstantRepresentation, self).__init__(num_events)
 
-    def frame_generator(self, events: np.array, H, W, C):
+    def frame_generator(self, events: np.array, H: int, W: int, C=1):
         event_count_frame = np.zeros((W, H))
         for ind, event in enumerate(events):
             x = int(event[0])
@@ -39,7 +37,7 @@ class ConstantRepresentation(FrameRepresentation):
         plt.imshow(frame)
         plt.show()
 
-        
+
 class RawRepresentation(Representation):
     def __init__(self):
         super(RawRepresentation, self).__init__()
@@ -81,5 +79,5 @@ class VoxelRepresentation(FrameRepresentation):
         frame = np.load(frame_path)
         for i in range(self.C):
             ax[i].imshow(frame[:, :, i])
-            ax[i].axis('off')
+            ax[i].axis("off")
         plt.show()

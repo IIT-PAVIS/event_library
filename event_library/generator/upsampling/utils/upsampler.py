@@ -1,8 +1,9 @@
+# type: ignore
 import os
 import shutil
-from typing import List
 import urllib
 import warnings
+from typing import List
 
 import cv2
 import numpy as np
@@ -11,18 +12,17 @@ import torchvision.transforms as transforms
 from tqdm import tqdm
 
 from . import Sequence
-from .const import mean, std, imgs_dirname
+from .const import imgs_dirname, mean, std
 from .model import UNet, backWarp
 from .utils import get_sequence_or_none
 
 
 class Upsampler:
-    _timestamps_filename = 'timestamps.txt'
+    _timestamps_filename = "timestamps.txt"
 
-    def __init__(self, input_dir: str, output_dir: str, device: str,
-                 ckpt_dir : str):
-        assert os.path.isdir(input_dir), 'The input directory must exist'
-        assert not os.path.exists(output_dir), 'The output directory must not exist'
+    def __init__(self, input_dir: str, output_dir: str, device: str, ckpt_dir: str):
+        assert os.path.isdir(input_dir), "The input directory must exist"
+        assert not os.path.exists(output_dir), "The output directory must not exist"
 
         self._prepare_output_dir(input_dir, output_dir)
         self.src_dir = input_dir
@@ -32,18 +32,22 @@ class Upsampler:
 
         self._load_net_from_checkpoint(ckpt_dir)
 
-        negmean= [x * -1 for x in mean]
-        self.negmean = self._move_to_device(torch.Tensor([x * -1 for x in mean]).view(3, 1, 1), self.device)
+        negmean = [x * -1 for x in mean]
+        self.negmean = self._move_to_device(
+            torch.Tensor([x * -1 for x in mean]).view(3, 1, 1), self.device
+        )
         revNormalize = transforms.Normalize(mean=negmean, std=std)
         self.TP = transforms.Compose([revNormalize])
 
     def _load_net_from_checkpoint(self, ckpt_file):
         if not os.path.exists(ckpt_file):
-            print('Downloading SuperSlowMo checkpoint to {} ...'.format(ckpt_file))
-            g = urllib.request.urlopen('http://rpg.ifi.uzh.ch/data/VID2E/SuperSloMo.ckpt')
-            with open(ckpt_file, 'w+b') as ckpt:
+            print("Downloading SuperSlowMo checkpoint to {} ...".format(ckpt_file))
+            g = urllib.request.urlopen(
+                "http://rpg.ifi.uzh.ch/data/VID2E/SuperSloMo.ckpt"
+            )
+            with open(ckpt_file, "w+b") as ckpt:
                 ckpt.write(g.read())
-            print('Done with downloading!')
+            print("Done with downloading!")
         assert os.path.isfile(ckpt_file)
 
         self.flowComp = UNet(6, 4)
@@ -58,13 +62,13 @@ class Upsampler:
         self.flowBackWarp_dict = dict()
 
         checkpoint = torch.load(ckpt_file, map_location=self.device)
-        self.ArbTimeFlowIntrp.load_state_dict(checkpoint['state_dictAT'])
-        self.flowComp.load_state_dict(checkpoint['state_dictFC'])
+        self.ArbTimeFlowIntrp.load_state_dict(checkpoint["state_dictAT"])
+        self.flowComp.load_state_dict(checkpoint["state_dictFC"])
 
     def get_flowBackWarp_module(self, width: int, height: int):
         module = self.flowBackWarp_dict.get((width, height))
         if module is None:
-            module  = backWarp(width, height, self.device)
+            module = backWarp(width, height, self.device)
             self._move_to_device(module, self.device)
             self.flowBackWarp_dict[(width, height)] = module
         assert module is not None
@@ -77,18 +81,24 @@ class Upsampler:
             if sequence is None:
                 continue
             sequence_counter += 1
-            print('Processing sequence number {}'.format(sequence_counter))
+            print("Processing sequence number {}".format(sequence_counter))
             reldirpath = os.path.relpath(src_absdirpath, self.src_dir)
             dest_imgs_dir = os.path.join(self.dest_dir, reldirpath, imgs_dirname)
-            dest_timestamps_filepath = os.path.join(self.dest_dir, reldirpath, self._timestamps_filename)
+            dest_timestamps_filepath = os.path.join(
+                self.dest_dir, reldirpath, self._timestamps_filename
+            )
             self.upsample_sequence(sequence, dest_imgs_dir, dest_timestamps_filepath)
 
-    def upsample_sequence(self, sequence: Sequence, dest_imgs_dir: str, dest_timestamps_filepath: str):
+    def upsample_sequence(
+        self, sequence: Sequence, dest_imgs_dir: str, dest_timestamps_filepath: str
+    ):
         os.makedirs(dest_imgs_dir, exist_ok=True)
         timestamps_list = list()
-        
+
         idx = 0
-        for img_pair, time_pair in tqdm(next(sequence), total=len(sequence), desc=type(sequence).__name__):
+        for img_pair, time_pair in tqdm(
+            next(sequence), total=len(sequence), desc=type(sequence).__name__
+        ):
             img_pair = self._move_to_device(img_pair, self.device)
             I0 = torch.unsqueeze(img_pair[0], dim=0)
             I1 = torch.unsqueeze(img_pair[1], dim=0)
@@ -105,7 +115,9 @@ class Upsampler:
             total_frames.append(self.TP(I0[0]))
             timestamps.append(t0)
 
-            self._upsample_adaptive(I0, I1, t0, t1, F_0_1, F_1_0, total_frames, timestamps)
+            self._upsample_adaptive(
+                I0, I1, t0, t1, F_0_1, F_1_0, total_frames, timestamps
+            )
 
             sorted_indices = np.argsort(timestamps)
 
@@ -123,6 +135,7 @@ class Upsampler:
         # Copy directory structure.
         def ignore_files(directory, files):
             return [f for f in files if os.path.isfile(os.path.join(directory, f))]
+
         shutil.copytree(src_dir, dest_dir, ignore=ignore_files)
 
     @staticmethod
@@ -134,8 +147,8 @@ class Upsampler:
 
     @staticmethod
     def _write_timestamps(timestamps: list, timestamps_filename: str):
-        with open(timestamps_filename, 'w') as t_file:
-            t_file.writelines([str(t) + '\n' for t in timestamps])
+        with open(timestamps_filename, "w") as t_file:
+            t_file.writelines([str(t) + "\n" for t in timestamps])
 
     @staticmethod
     def _to_numpy_image(img: torch.Tensor):
@@ -143,19 +156,21 @@ class Upsampler:
         img = np.transpose(img, (0, 2, 3, 1))
         return img
 
-    def _upsample_adaptive(self,
-                           I0: torch.Tensor,
-                           I1: torch.Tensor,
-                           time0: torch.Tensor,
-                           time1: torch.Tensor,
-                           F_0_1: torch.Tensor,
-                           F_1_0: torch.Tensor,
-                           total_frames: List[torch.Tensor],
-                           timestamps: List[float]):
+    def _upsample_adaptive(
+        self,
+        I0: torch.Tensor,
+        I1: torch.Tensor,
+        time0: torch.Tensor,
+        time1: torch.Tensor,
+        F_0_1: torch.Tensor,
+        F_1_0: torch.Tensor,
+        total_frames: List[torch.Tensor],
+        timestamps: List[float],
+    ):
         B, _, _, _ = F_0_1.shape
 
-        flow_mag_0_1_max, _ = F_0_1.pow(2).sum(1).pow(.5).view(B,-1).max(-1)
-        flow_mag_1_0_max, _ = F_1_0.pow(2).sum(1).pow(.5).view(B,-1).max(-1)
+        flow_mag_0_1_max, _ = F_0_1.pow(2).sum(1).pow(0.5).view(B, -1).max(-1)
+        flow_mag_1_0_max, _ = F_1_0.pow(2).sum(1).pow(0.5).view(B, -1).max(-1)
 
         flow_mag_max, _ = torch.stack([flow_mag_0_1_max, flow_mag_1_0_max]).max(0)
         flow_mag_max = torch.ceil(flow_mag_max).int()
@@ -175,7 +190,11 @@ class Upsampler:
                 g_I1_F_t_1 = flow_back_warp(I1, F_t_1)
 
                 intrpOut = self.ArbTimeFlowIntrp(
-                    torch.cat((I0, I1, F_0_1, F_1_0, F_t_1, F_t_0, g_I1_F_t_1, g_I0_F_t_0), dim=1))
+                    torch.cat(
+                        (I0, I1, F_0_1, F_1_0, F_t_1, F_t_0, g_I1_F_t_1, g_I0_F_t_0),
+                        dim=1,
+                    )
+                )
                 F_t_0_f = intrpOut[:, :2, :, :] + F_t_0
                 F_t_1_f = intrpOut[:, 2:4, :, :] + F_t_1
                 V_t_0 = torch.sigmoid(intrpOut[:, 4:5, :, :])
@@ -186,8 +205,9 @@ class Upsampler:
 
                 wCoeff = [1 - t, t]
 
-                Ft_p = (wCoeff[0] * V_t_0 * g_I0_F_t_0_f + wCoeff[1] * V_t_1 * g_I1_F_t_1_f) / (
-                        wCoeff[0] * V_t_0 + wCoeff[1] * V_t_1)
+                Ft_p = (
+                    wCoeff[0] * V_t_0 * g_I0_F_t_0_f + wCoeff[1] * V_t_1 * g_I1_F_t_1_f
+                ) / (wCoeff[0] * V_t_0 + wCoeff[1] * V_t_1)
 
                 Ft_p_norm = Ft_p[i] - self.negmean
 
@@ -195,12 +215,8 @@ class Upsampler:
                 timestamps += [(time0 + t * (time1 - time0))]
 
     @classmethod
-    def _move_to_device(
-            cls,
-            _input,
-            device: torch.device,
-            dtype: torch.dtype = None):
-        if not torch.cuda.is_available() and not device == torch.device('cpu'):
+    def _move_to_device(cls, _input, device: torch.device, dtype: torch.dtype = None):
+        if not torch.cuda.is_available() and not device == torch.device("cpu"):
             warnings.warn("CUDA not available! Input remains on CPU!", Warning)
 
         if isinstance(_input, torch.nn.Module):
@@ -210,5 +226,10 @@ class Upsampler:
             return _input.to(device=device, dtype=dtype)
         if isinstance(_input, list):
             return [cls._move_to_device(v, device=device, dtype=dtype) for v in _input]
-        warnings.warn("Instance type '{}' not supported! Input remains on current device!".format(type(_input)), Warning)
+        warnings.warn(
+            "Instance type '{}' not supported! Input remains on current device!".format(
+                type(_input)
+            ),
+            Warning,
+        )
         return _input

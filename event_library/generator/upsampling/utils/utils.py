@@ -1,12 +1,15 @@
+# type: ignore
 import os
 from pathlib import Path
 from typing import Union
 
 from .const import fps_filename, imgs_dirname, video_formats
-from .dataset import Sequence, ImageSequence, VideoSequence
+from .dataset import ImageSequence, Sequence, VideoSequence
+
 
 def is_video_file(filepath: str):
     return Path(filepath).suffix.lower() in video_formats
+
 
 def get_fps_file(dirpath: str) -> Union[None, str]:
     fps_file = os.path.join(dirpath, fps_filename)
@@ -14,11 +17,13 @@ def get_fps_file(dirpath: str) -> Union[None, str]:
         return fps_file
     return None
 
+
 def get_imgs_directory(dirpath: str) -> Union[None, str]:
     imgs_dir = os.path.join(dirpath, imgs_dirname)
     if os.path.isdir(imgs_dir):
         return imgs_dir
     return None
+
 
 def get_video_file(dirpath: str) -> Union[None, str]:
     filenames = [f for f in os.listdir(dirpath) if is_video_file(f)]
@@ -28,12 +33,14 @@ def get_video_file(dirpath: str) -> Union[None, str]:
     filepath = os.path.join(dirpath, filenames[0])
     return filepath
 
+
 def fps_from_file(fps_file) -> Union[None, int]:
     assert os.path.isfile(fps_file)
-    with open(fps_file, 'r') as f:
+    with open(fps_file, "r") as f:
         fps = float(f.readline().strip())
-    assert fps > 0, 'Expected fps to be larger than 0. Instead got fps={}'.format(fps)
+    assert fps > 0, "Expected fps to be larger than 0. Instead got fps={}".format(fps)
     return fps
+
 
 def get_sequence_or_none(dirpath: str) -> Union[None, Sequence]:
     fps_file = get_fps_file(dirpath)
@@ -51,5 +58,3 @@ def get_sequence_or_none(dirpath: str) -> Union[None, Sequence]:
     if video_file is not None:
         return VideoSequence(video_file)
     return None
-
-

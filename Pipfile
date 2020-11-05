@@ -15,6 +15,7 @@ esim-py = {file = "file:///home/gianlucascarpellini/dev/event_library/third_part
 pytest = "*"
 yapf = "*"
 black = "*"
+mypy = "*"
 
 [requires]
 python_version = "3.8"
