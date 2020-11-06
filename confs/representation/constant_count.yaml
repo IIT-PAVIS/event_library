@@ -1,4 +1,4 @@
 # @package _group_
-_target_: event_library.generator.ConstantRepresentation
+type: constant_count
 params:
-  num_events: 7500 
+  num_events: 7500
