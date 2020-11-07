@@ -1,4 +1,4 @@
 # @package _group_
-type: constant_count
-params:
+type: constant-count
+args:
   num_events: 7500

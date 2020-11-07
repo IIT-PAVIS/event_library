@@ -16,6 +16,7 @@ pytest = "*"
 yapf = "*"
 black = "*"
 mypy = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.8"

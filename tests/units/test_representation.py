@@ -10,7 +10,7 @@ def mock_events(n_events, H, W) -> np.array:
     heights = np.random.randint(0, H, (n_events, 1))
     polarities = np.random.randint(0, 1, (n_events, 1))
     times = np.sort(np.random.rand(n_events, 1))
-    return np.stack([heights, widths, times, polarities], axis=1)
+    return np.stack([widths, heights, times, polarities], axis=1)
 
 
 class TestSwitch:
@@ -31,7 +31,7 @@ class TestConstantCount:
     )
     def test_generator(self, n_generated, num_events, H, W):
         events = mock_events(n_generated, H, W)
-        generator = constant_count.get_generator(events, num_events, H, W)
+        generator = constant_count.get_generator(events, num_events, (H, W))
 
         for event_frame in generator:
             assert event_frame.shape == (H, W, 1)
@@ -57,7 +57,7 @@ class TestVoxel:
     def test_generator(self, n_generated, num_events, H, W, bins):
         events = mock_events(n_generated, H, W)
         generator = spatiotemporal_voxel_grid.get_generator(
-            events, num_events, H, W, bins
+            events, num_events, (H, W), bins
         )
 
         for event_frame in generator:
