@@ -37,7 +37,9 @@ test:
 
 run:
   script:
-    - python -m setup.py bdist_wheel
+    - python -m pip install -r requirements/test.txt  # you can also use tox
+    - python -m pip install -r requirements/dev.txt  # you can also use tox    
+    - python setup.py bdist_wheel
     # an alternative approach is to install and run:
     - python -m pip install dist/*
     # run the command here
