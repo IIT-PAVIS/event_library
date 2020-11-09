@@ -1,14 +1,23 @@
-# event_library
-Event library
+# event-library
+Library for event-based vision
 
-## Start
+## Setup
 Clone the repo:
 
-`git clone https://github.com/gianscarpe/event_library.git`
+`git clone https://gitlab.iit.it/gscarpellini/event-library`
 
 Install event_library:
 ```
 python -m pip install .
+```
+
+## Contributing
+If you want to contribute to `event-library`, we suggest to create a virtualenv first. You can use `pipenv` for that. 
+```
+git clone https://gitlab.iit.it/gscarpellini/event-library
+cd event-library
+pipenv install
+pre-commit install
 ```
 
 ## Generator
@@ -64,5 +73,3 @@ videos, set 'frame_dir' instead
 `upsample`: if true, upsample frames to higher fps using SuperSloMo model
 
 `emulate`: if true, create output events files as `npy` using `representation` stretegy
-
-`show_debug_images`: n of image to show for debug at the end of the script
