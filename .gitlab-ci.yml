@@ -1,6 +1,6 @@
 # Official language image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/python/tags/
-image: docker:19.03.10
+image: python:3.8-alpine
 
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
@@ -18,23 +18,23 @@ cache:
     - venv/
 
 before_script:
-  - python3 -V  # Print out python version for debugging
-  - python3 -m pip install virtualenv
+  - python -V  # Print out python version for debugging
+  - python -m pip install virtualenv
   - virtualenv venv
   - source venv/bin/activate
 
 test:
   script:
-    - python3 -m pip install .
-    - python3 -m pip install -r requirements/test.txt  # you can also use tox
-    - python3 -m pip install -r requirements/dev.txt  # you can also use tox    
+    - python -m pip install .
+    - python -m pip install -r requirements/test.txt  # you can also use tox
+    - python -m pip install -r requirements/dev.txt  # you can also use tox    
     - pytest
 
 run:
   script:
-    - python3 -m setup.py bdist_wheel
+    - python -m setup.py bdist_wheel
     # an alternative approach is to install and run:
-    - python3 -m pip install dist/*
+    - python -m pip install dist/*
     # run the command here
   artifacts:
     paths:
