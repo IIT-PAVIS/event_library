@@ -13,7 +13,7 @@ def mock_events(n_events, H, W) -> np.array:
     return np.stack([widths, heights, times, polarities], axis=1)
 
 
-class TestSwitch:
+class TestSwitches:
     def test_constant_count(self):
         assert representations.get_representation("constant-count") == constant_count
 

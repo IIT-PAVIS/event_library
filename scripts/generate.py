@@ -6,12 +6,15 @@ import numpy as np
 from omegaconf import DictConfig
 from tqdm import tqdm
 
+import event_library as el
 import event_library.representations as representations
 from event_library.generator import SimulatorWrapper
-from event_library.generator.upsample import upsample
+from third_parties.esim_py_upsampling import upsample
 
 # A logger for this file
 log = logging.getLogger(__name__)
+
+DEVICE = el.DEVICE
 
 
 def _do_extraction(cfg, input_dir, tmp_frames_dir):
@@ -24,7 +27,7 @@ def _do_extraction(cfg, input_dir, tmp_frames_dir):
 
 def _do_upsample(tmp_frames_dir, tmp_upsample_dir):
     log.info("Upsampling")
-    upsample(tmp_frames_dir, tmp_upsample_dir)
+    upsample.upsample(tmp_frames_dir, tmp_upsample_dir, device=DEVICE)
     log.info("Upsampling completed")
 
 
