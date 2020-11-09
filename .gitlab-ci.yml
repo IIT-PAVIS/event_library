@@ -18,23 +18,23 @@ cache:
     - venv/
 
 before_script:
-  - python -V  # Print out python version for debugging
-  - pip install virtualenv
+  - python3 -V  # Print out python version for debugging
+  - python3 -m pip install virtualenv
   - virtualenv venv
   - source venv/bin/activate
 
 test:
   script:
-    - python -m pip install .
-    - pip install -r requirements/test.txt  # you can also use tox
-    - pip install -r requirements/dev.txt  # you can also use tox    
+    - python3 -m pip install .
+    - python3 -m pip install -r requirements/test.txt  # you can also use tox
+    - python3 -m pip install -r requirements/dev.txt  # you can also use tox    
     - pytest
 
 run:
   script:
-    - python setup.py bdist_wheel
+    - python3 -m setup.py bdist_wheel
     # an alternative approach is to install and run:
-    - pip install dist/*
+    - python3 -m pip install dist/*
     # run the command here
   artifacts:
     paths:
