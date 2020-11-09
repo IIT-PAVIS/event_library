@@ -25,7 +25,7 @@ before_script:
 
 test:
   script:
-    - python setup.py install
+    - python -m pip install .
     - pip install -r requirements/test.txt  # you can also use tox
     - pip install -r requirements/dev.txt  # you can also use tox    
     - pytest
