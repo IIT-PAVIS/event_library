@@ -1,6 +1,3 @@
 pytest
-<<<<<<< HEAD
 pre-commit
-=======
 pytest-cov
->>>>>>> 070ae0c1f763c4e11d1a444340d57678203dacf9
