@@ -1,15 +1,20 @@
+from typing import Tuple
+
 import numpy as np
-from matplotlib import pyplot as plt
+from matplotlib import pyplot as pl
 
 
-def get_generator(events, num_events, H, W, bins):
-    event_count_frame = np.zeros((H, W, bins))
+def get_generator(
+    events: np.array, num_events: int, frame_size: Tuple[int, int], bins: int, **kwargs
+) -> np.array:
+
+    event_count_frame = np.zeros((frame_size[0], frame_size[1], bins))
     t0 = events[0][2]
     dt = events[num_events - 1][2] - t0
 
     for ind, event in enumerate(events):
-        x = int(event[0])
-        y = int(event[1])
+        y = int(event[0])
+        x = int(event[1])
         ti = event[2]
         p = int(event[3])
         t = (bins - 1) / dt * (ti - t0)

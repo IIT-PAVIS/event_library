@@ -65,3 +65,4 @@ config.yaml
 *.tex
 *.png
 src/
+outputs

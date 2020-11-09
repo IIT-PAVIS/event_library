@@ -1,51 +1,46 @@
-from esim_py import EventSimulator
-import os
-import numpy as np
-from tqdm import tqdm
 import glob
+import os
+
 import cv2
+import numpy as np
+from esim_py import EventSimulator
+from tqdm import tqdm
 
 
 class SimulatorWrapper(EventSimulator):
-    def __init__(self,
-                 Cp,
-                 Cn,
-                 refractory_period,
-                 log_eps,
-                 use_log,
-                 batch_size=2000):
-        super(SimulatorWrapper, self).__init__(Cp, Cn, refractory_period,
-                                               log_eps, use_log)
+    def __init__(self, Cp, Cn, refractory_period, log_eps, use_log, batch_size=2000):
+        super(SimulatorWrapper, self).__init__(
+            Cp, Cn, refractory_period, log_eps, use_log
+        )
         self.batch_size = batch_size
 
+    def set_input_dir(self, input_dir):
+        img_dir = os.path.join(input_dir, "imgs", "*")
+        self.ts = self._get_ts_from_file(input_dir)
+        self.images_path = sorted(glob.glob(img_dir))
+
     def _get_ts_from_file(self, input_dir):
-        ts_path = os.path.join(input_dir, 'timestamps.txt')
+        ts_path = os.path.join(input_dir, "timestamps.txt")
         ts = []
         with open(ts_path) as ts_file:
             for x in ts_file:
                 ts.append(float(x))
         return ts
 
-    def generate(self, input_dir, output_dir, representation):
-        imgs_path = os.path.join(input_dir, 'imgs', '*')
-        ts = self._get_ts_from_file(input_dir)
+    def get_frames_dimension(self):
+        shape = cv2.imread(self.images_path[0]).shape
+        return shape
 
-        images_path = sorted(glob.glob(imgs_path))
-        n_images = len(images_path)
-        print(f"Start generating events for {input_dir}; n {n_images}")
-        H, W, C = cv2.imread(images_path[0]).shape
+    def __len__(self):
+        return len(self.images_path) // self.batch_size + 1
 
-        for i in tqdm(range(n_images // self.batch_size + 1)):
-            out_part_dir = os.path.join(output_dir, f"part_{i}")
-            os.makedirs(out_part_dir, exist_ok=True)
-            end_id = min(i + self.batch_size, n_images)
-            images_input_paths = images_path[i:end_id]
-            ts_input_paths = ts[i:end_id]
+    def __iter__(self):
+        for idx in range(len(self)):
+            start_id = idx * self.batch_size
+            end_id = min(start_id + self.batch_size, len(self.images_path))
+            images_input_paths = self.images_path[start_id:end_id]
+            ts_input_paths = self.ts[start_id:end_id]
             events = self.generateFromStampedImageSequence(
-                images_input_paths, ts_input_paths)
-            # representation yields frame of events
-            for ind, frame in enumerate(
-                    representation.frame_generator(events, H, W, C)):
-                np.save(os.path.join(out_part_dir, f"frame{ind:07d}.npy"),
-                        frame)
-            del events
+                images_input_paths, ts_input_paths
+            )
+            yield events
