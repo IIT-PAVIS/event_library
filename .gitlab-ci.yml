@@ -37,6 +37,7 @@ test:
 build:
   only:
     - master
+    - tags
   script:
     - python -m pip install -r requirements/test.txt  
     - python -m pip install -r requirements/dev.txt
@@ -48,3 +49,14 @@ build:
   artifacts:
     paths:
       - dist/*.whl
+
+pages:
+  stage: deploy
+  script:
+  - python -m pip install -r requirements/docs.txt  
+  - sphinx-build -b html docs/build public
+  artifacts:
+    paths:
+    - public
+  only:
+  - master
