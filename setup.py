@@ -12,7 +12,7 @@ def get_info():
         long_description = fh.read()
         version = re.search(
             r'^__version__\s*=\s*"(.*)"',
-            open("experimenting/__init__.py").read(),
+            open("event_library/__init__.py").read(),
             re.MULTILINE,
         ).group(1)
     return long_description, version
