@@ -32,7 +32,7 @@ build:
 test:
   stage: test
   script:
-    - python -m pip install -r requirements/test.tx    
+    - python -m pip install -r requirements/test.txt
     - coverage run -m pytest
     - coverage report
     - coverage xml
