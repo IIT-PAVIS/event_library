@@ -18,7 +18,6 @@ def get_generator(
             event_count_frame = np.zeros_like(event_count_frame)
 
 
-def display(self, frame_path):
-    frame = np.load(frame_path)
+def display(frame: np.array):
     plt.imshow(frame)
     plt.show()

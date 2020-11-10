@@ -61,7 +61,7 @@ def _generate_frames_and_save(cfg: dict, simulator: SimulatorWrapper, output_dir
         **{"frame_size": (frame_shape[0], frame_shape[1]), **cfg.representation.args},
     )
     for events_batch in tqdm(simulator):
-        for frame in enumerate(representation_gen(events_batch)):
+        for frame in representation_gen(events_batch):
             np.save(
                 os.path.join(output_dir, f"frame{events_frame_index:07d}.npy"), frame
             )
@@ -70,7 +70,7 @@ def _generate_frames_and_save(cfg: dict, simulator: SimulatorWrapper, output_dir
 
 @hydra.main(config_path="../confs", config_name="generate.yaml")
 def main(cfg: DictConfig):
-    print(cfg.pretty())
+    log.info(cfg.pretty())
 
     input_dir = cfg.input_dir
     tmp_dir = cfg.tmp_dir

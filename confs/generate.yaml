@@ -2,8 +2,7 @@ defaults:
   - representation: voxel
   - vid2e: standard
   - extractor: ntu
-
-show_debug_images: 10
+ 
 
 input_dir: 
 frames_dir:

@@ -6,5 +6,5 @@ def get_generator(events: np.array, **kwargs):
         yield event
 
 
-def display():
-    raise NotADirectoryError
+def display(frame: np.array):
+    raise NotImplementedError()

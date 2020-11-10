@@ -32,5 +32,5 @@ def get_generator(
             dt = events[end_index][2] - t0
 
 
-def display(frame_path):
+def display(frame: np.array):
     raise NotImplementedError
