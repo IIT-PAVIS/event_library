@@ -29,7 +29,7 @@ class Upsampler:
         self.dest_dir = output_dir
 
         self.device = torch.device(device)
-
+        os.makedirs(ckpt_dir, exist_ok=True)
         self._load_net_from_checkpoint(ckpt_dir)
 
         negmean = [x * -1 for x in mean]
@@ -45,6 +45,7 @@ class Upsampler:
             g = urllib.request.urlopen(
                 "http://rpg.ifi.uzh.ch/data/VID2E/SuperSloMo.ckpt"
             )
+            __import__("pdb").set_trace()
             with open(ckpt_file, "w+b") as ckpt:
                 ckpt.write(g.read())
             print("Done with downloading!")

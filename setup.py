@@ -33,7 +33,7 @@ setuptools.setup(
     author_email="gianluca@scarpellini.dev",
     description="Event library",
     url="https://github.com/gianscarpe/event_library",
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(exclude=("tests", "scripts")),
     install_requires=[
         "opencv-python",
         "torch",
@@ -46,7 +46,7 @@ setuptools.setup(
         "License :: OSI Approved :: GPL License",
         "Operating System :: Linux",
     ],
-    python_requires=">=3.6",
+    python_requires=">=3.8",
 )
 
 install_subs()

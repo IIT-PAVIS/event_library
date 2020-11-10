@@ -1,2 +1,2 @@
-representation:
-  _target_: event_library.generator.RawRepresentation
+# @package _group_
+type: raw
