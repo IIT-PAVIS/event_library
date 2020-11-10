@@ -1,9 +1,24 @@
 import glob
 import os
+import re
 import subprocess
 import sys
 
 import setuptools
+
+
+def get_info():
+    with open("README.md", "r") as fh:
+        long_description = fh.read()
+        version = re.search(
+            r'^__version__\s*=\s*"(.*)"',
+            open("experimenting/__init__.py").read(),
+            re.MULTILINE,
+        ).group(1)
+    return long_description, version
+
+
+long_description, version = get_info()
 
 
 def install_subs():
@@ -26,12 +41,16 @@ def install_subs():
             )
 
 
+long_description, version = get_info()
+
 setuptools.setup(
     name="event_library",
     version="0.2",
-    author="gianscarpe",
-    author_email="gianluca@scarpellini.dev",
+    author="Gianluca Scarpellini",
+    author_email="gianluca.scarpellini@iit.it",
     description="Event library",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     url="https://github.com/gianscarpe/event_library",
     packages=setuptools.find_packages(exclude=("tests", "scripts")),
     install_requires=[
