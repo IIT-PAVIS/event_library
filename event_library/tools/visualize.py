@@ -13,7 +13,7 @@ import event_library.representations as representations
 log = logging.getLogger(__name__)
 
 
-@hydra.main(config_path="../confs", config_name="visualize.yaml")
+@hydra.main(config_path="confs", config_name="visualize.yaml")
 def main(cfg: DictConfig):
     log.info(OmegaConf.to_yaml(cfg))
     file_path = cfg.file_path

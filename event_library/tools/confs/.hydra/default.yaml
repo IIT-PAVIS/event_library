@@ -1,0 +1,3 @@
+hydra:
+  sweep:
+    subdir: ${hydra.job.num}_${hydra.job.override_dirname}
