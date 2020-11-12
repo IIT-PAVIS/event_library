@@ -20,6 +20,7 @@ pytest-cov = "*"
 m2r = "*"
 sphinx-rtd-theme = "*"
 Sphinx = "==2.4.4"
+pre-commit = "*"
 
 [requires]
 python_version = "3.8"

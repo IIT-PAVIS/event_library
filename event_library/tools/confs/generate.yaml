@@ -2,6 +2,7 @@ defaults:
   - representation: voxel
   - vid2e: standard
   - extractor: ntu
+  - hydra/help: generate
  
 
 input_dir: 

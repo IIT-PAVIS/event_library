@@ -11,22 +11,28 @@ variables:
 # https://pip.pypa.io/en/stable/reference/pip_install/#caching
 #
 # If you want to also cache the installed packages, you have to install
-# them in a virtualenv and cache it as well.
-#cache:
-#  paths:
-#    - .cache/pip
-#    - venv/
 
 before_script:
   - python -V  # Print out python version for debugging
   - python -m pip install virtualenv
   - virtualenv venv
   - source venv/bin/activate
+  - python -m pip install .
 
-test:
+build:
+  stage: build
   script:
-    - python -m pip install .
     - python -m pip install -r requirements/test.txt  
+    - python -m pip install -r requirements/dev.txt
+    - python setup.py bdist_wheel
+  artifacts:
+    paths:
+      - dist/*.whl
+  
+test:
+  stage: test
+  script:
+    - python -m pip install -r requirements/test.txt
     - coverage run -m pytest
     - coverage report
     - coverage xml
@@ -34,29 +40,20 @@ test:
     reports:
       cobertura: 'coverage.xml'    
 
-build:
-  only:
-    - master
-    - tags
-  script:
-    - python -m pip install -r requirements/test.txt  
-    - python -m pip install -r requirements/dev.txt
-    - python setup.py bdist_wheel
-    # an alternative approach is to install and run:
-    - python -m pip install dist/*
-    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url https://gitlab.iit.it/api/v4/projects/${CI_PROJECT_ID}/packages/pypi dist/*
-    # run the command here
-  artifacts:
-    paths:
-      - dist/*.whl
-
 pages:
   stage: deploy
   script:
-  - python -m pip install -r requirements/docs.txt  
-  - sphinx-build -b html docs/build public
+    - python -m pip install -r requirements/docs.txt  
+    - sphinx-build -b html docs/source public
   artifacts:
     paths:
     - public
+
+
+deploy-package:
+  stage: deploy
+  script:
+    - python -m pip install dist/*    
+    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url https://gitlab.iit.it/api/v4/projects/${CI_PROJECT_ID}/packages/pypi dist/*
   only:
-  - master
+  - master  

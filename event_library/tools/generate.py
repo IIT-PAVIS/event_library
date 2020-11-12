@@ -52,7 +52,9 @@ def _do_simulation(cfg, tmp_upsample_dir, base_output_dir):
     log.info("Simulation end")
 
 
-def _generate_frames_and_save(cfg: dict, simulator: SimulatorWrapper, output_dir: str):
+def _generate_frames_and_save(
+    cfg: DictConfig, simulator: SimulatorWrapper, output_dir: str
+):
     os.makedirs(output_dir, exist_ok=True)
     frame_shape = simulator.get_frames_dimension()
     events_frame_index = 0
@@ -68,7 +70,7 @@ def _generate_frames_and_save(cfg: dict, simulator: SimulatorWrapper, output_dir
             events_frame_index += 1
 
 
-@hydra.main(config_path="../confs", config_name="generate.yaml")
+@hydra.main(config_path="confs", config_name="generate.yaml")
 def main(cfg: DictConfig):
     log.info(cfg.pretty())
 
