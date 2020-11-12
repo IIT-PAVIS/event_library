@@ -41,7 +41,6 @@ build:
     - python -m pip install -r requirements/test.txt  
     - python -m pip install -r requirements/dev.txt
     - python setup.py bdist_wheel
-    # an alternative approach is to install and run:
     - python -m pip install dist/*
     - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url https://gitlab.iit.it/api/v4/projects/${CI_PROJECT_ID}/packages/pypi dist/*
     # run the command here
