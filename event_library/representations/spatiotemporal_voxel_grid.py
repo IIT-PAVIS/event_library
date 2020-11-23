@@ -1,3 +1,6 @@
+"""
+Implementation of `spatio-temporal voxel-grid` representation
+"""
 from typing import Tuple
 
 import numpy as np

@@ -59,6 +59,7 @@ setuptools.setup(
         "torchvision",
         "hydra-core",
         "matplotlib",
+        "numpy"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

@@ -12,11 +12,13 @@
 #
 import os
 import sys
+import builtins
 
 sys.path.insert(0, os.path.abspath("../.."))
 PATH_HERE = os.path.abspath(os.path.dirname(__file__))
 PATH_ROOT = os.path.join(PATH_HERE, "..", "..")
 SPHINX_MOCK_REQUIREMENTS = int(os.environ.get("SPHINX_MOCK_REQUIREMENTS", True))
+builtins.__EL_SETUP__ = True
 
 import event_library as el  # noqa: E402
 
@@ -69,6 +71,7 @@ MOCK_MANUAL_PACKAGES = [
     # packages with different package name compare to import name
     "hydra",
     "cv2",
+    "esim_py"
 ]
 autodoc_mock_imports = MOCK_PACKAGES + MOCK_MANUAL_PACKAGES
 
