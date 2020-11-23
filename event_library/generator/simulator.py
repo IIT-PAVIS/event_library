@@ -1,10 +1,13 @@
+"""
+Simulator wrapper for esim_py EventSimulator. It wrapped the original simulator, which must be
+present. More advance wrappers (e.g., with parameters sampling) can be implemented as well
+"""
+
 import glob
 import os
 
 import cv2
-import numpy as np
 from esim_py import EventSimulator
-from tqdm import tqdm
 
 
 class SimulatorWrapper(EventSimulator):
@@ -13,8 +16,16 @@ class SimulatorWrapper(EventSimulator):
             Cp, Cn, refractory_period, log_eps, use_log
         )
         self.batch_size = batch_size
+        self.ts = []
+        self.images_path = []
 
-    def set_input_dir(self, input_dir):
+    def set_input_dir(self, input_dir: str):
+        """
+        It loads images and timestamp from an input video frames. It expects
+        a 'img' directory with the frames of the video ordered by name and a "timestamps.txt" file
+        that specify the timestamp of the video. Must be called before the iterator!
+        """
+
         img_dir = os.path.join(input_dir, "imgs", "*")
         self.ts = self._get_ts_from_file(input_dir)
         self.images_path = sorted(glob.glob(img_dir))
@@ -27,7 +38,13 @@ class SimulatorWrapper(EventSimulator):
                 ts.append(float(x))
         return ts
 
-    def get_frames_dimension(self):
+    def get_frames_dimension(self) -> (int, int, int):
+        """
+        Returns
+        -------
+        Return the dimension of the frames of the video
+
+        """
         shape = cv2.imread(self.images_path[0]).shape
         return shape
 

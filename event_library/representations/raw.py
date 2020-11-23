@@ -1,3 +1,6 @@
+"""
+Implementation of `raw` events representation (no representation!)
+"""
 import numpy as np
 
 

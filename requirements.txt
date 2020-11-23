@@ -3,4 +3,5 @@ torchvision
 hydra-core
 matplotlib
 tqdm
+numpy
 ./third_parties/esim_py-0.0.1-cp38-cp38-linux_x86_64.whl

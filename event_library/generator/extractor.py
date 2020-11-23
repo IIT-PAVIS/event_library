@@ -1,3 +1,9 @@
+"""
+Implementation of frames extractors for NTU dataset. It can be used as reference to implement custom extractor for
+different datasets
+
+"""
+
 import cv2
 import os
 
@@ -20,8 +26,15 @@ class NTU_extractor:
         print(f"Found n {len(video_files)} videos")
         return video_files
 
-    def extract_frames(self, root_dir, output_dir):
+    def extract_frames(self, root_dir: str, output_dir: str):
+        """
+        Implementation of function extraction for input directory
 
+        Parameters
+        ----------
+        root_dir:
+        output_dir
+        """
         video_files = NTU_extractor._get_ntu_video_files(root_dir)
 
         for seq, video_file in enumerate(tqdm(video_files)):

@@ -1,3 +1,6 @@
+"""
+Implementation of `constant_count` representation
+"""
 from typing import Tuple
 
 import numpy as np
@@ -5,8 +8,7 @@ from matplotlib import pyplot as plt
 
 
 def get_generator(
-    events: np.array, num_events: int, frame_size: Tuple[int, int]
-) -> np.array:
+    events: np.array, num_events: int, frame_size: Tuple[int, int]) -> np.array:
     event_count_frame = np.zeros((frame_size[0], frame_size[1], 1))
 
     for ind, event in enumerate(events):

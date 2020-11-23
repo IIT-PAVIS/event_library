@@ -12,13 +12,6 @@ event\_library.generator.extractor module
    :undoc-members:
    :show-inheritance:
 
-event\_library.generator.representations module
------------------------------------------------
-
-.. automodule:: event_library.generator.representations
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 event\_library.generator.simulator module
 -----------------------------------------
