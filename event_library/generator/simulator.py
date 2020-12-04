@@ -5,6 +5,7 @@ present. More advance wrappers (e.g., with parameters sampling) can be implement
 
 import glob
 import os
+from typing import Tuple
 
 import cv2
 from esim_py import EventSimulator
@@ -38,7 +39,7 @@ class SimulatorWrapper(EventSimulator):
                 ts.append(float(x))
         return ts
 
-    def get_frames_dimension(self) -> (int, int, int):
+    def get_frames_dimension(self) -> Tuple[int, int, int]:
         """
         Returns
         -------
