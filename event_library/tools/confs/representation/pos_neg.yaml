@@ -1,0 +1,4 @@
+# @package _group_
+type: pos_neg
+params:
+  num_events: 30000
