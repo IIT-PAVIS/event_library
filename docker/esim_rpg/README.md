@@ -1,6 +1,15 @@
 # ESIM_RPG docker images
+You can use `esim_rpg` with the provided `run.py` script, or you can explore and launch process from docker using the provided Dockerfile. 
+## python script
 
-## Instructions
+```bash
+python run.py --img_dir input_dir --img_name img1.jpg img2.jpg --out_dir out_dir --spawn_n N_THREADS
+```
+### Notes
+- If you want to send all files of an input_dir as `img_name`, you can do this in bash: `$(ls input_dir)`
+- Please set `out_dir` group ownership to enable Docker to write into it. You can do this with `sudo chown -R $(whoami):1000 out_dir`
+
+## Docker script
 ### Pull
 `docker pull gianscarpe/esim_rpg:latest`
 
