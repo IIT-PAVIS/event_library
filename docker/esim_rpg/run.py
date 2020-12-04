@@ -18,7 +18,10 @@ Gianluca Scarpellini - gianluca.scarpellini@iit.it - 2020
 import argparse
 import logging
 import subprocess
+import threading
 from pathlib import Path
+
+logging.basicConfig(filename="logging.txt", level=logging.DEBUG)
 
 
 def _get_command(img_name: str, input_dir: str, out_dir: str, conf_file: str) -> str:
@@ -79,10 +82,10 @@ def main():
     for thread_n in range(spawn_n):
         start_i = images_per_thread * thread_n
         end_i = min(len(img_names), start_i + images_per_thread)
-        _spawn_processing_thread(
-            thread_n, img_names[start_i:end_i], input_dir, out_dir, conf_file
-        )
-        
+        args = (thread_n, img_names[start_i:end_i], input_dir, out_dir, conf_file)
+        x = threading.Thread(target=_spawn_processing_thread, args=args)
+        x.start()
+
 
 if __name__ == "__main__":
     main()
