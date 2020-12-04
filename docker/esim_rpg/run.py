@@ -82,7 +82,7 @@ def main():
         _spawn_processing_thread(
             thread_n, img_names[start_i:end_i], input_dir, out_dir, conf_file
         )
-
+        
 
 if __name__ == "__main__":
     main()
