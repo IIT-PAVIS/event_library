@@ -1,4 +1,3 @@
-
 """
 This script provides a easy-to-use API for esim_rpg simulator. ESIM_RPG provides
 a toolbox for converting a standard image to a sequence of simulated events. It
@@ -25,7 +24,9 @@ from pathlib import Path
 logging.basicConfig(filename="logging.txt", level=logging.DEBUG)
 
 
-def _get_command(docker_img:str, input_name: str, input_dir: str, out_dir: str, conf_file: str) -> str:
+def _get_command(
+    docker_img: str, input_name: str, input_dir: str, out_dir: str, conf_file: str
+) -> str:
     out_name = input_name.split(".")[0] + ".txt"
     setup_cmd = "source ~/setupeventsim.sh; roscore"
     source_esim_cmd = "source ~/sim_ws/devel/setup.bash; roscd esim_ros"
@@ -45,16 +46,15 @@ def _spawn_processing_thread(
     thread_id: int, img_names: list, input_dir: str, out_dir: str, conf_file: str
 ) -> None:
     logging.info(f"Thread {thread_id} computing ...")
-    process = subprocess.Popen("$(docker build -q .)", shell=True, stdout=subprocess.PIPE)
-    docker_img, _ = process.communicate()    
-    __import__("pdb").set_trace()
+    result = subprocess.run("docker build -q .", shell=True, stdout=subprocess.PIPE)
+    docker_img = result.stdout.decode("utf-8")[:-1]
 
     for img_name in img_names:
-        cmd = _get_command(img_name, input_dir, out_dir, conf_file, docker_img)
+        cmd = _get_command(docker_img, img_name, input_dir, out_dir, conf_file)
         process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
         output, error = process.communicate()
         logging.debug(output)
-        logging.debug(error)
+        logging.error(error)
 
     logging.debug(f"Thread {thread_id} Done!")
     return None
