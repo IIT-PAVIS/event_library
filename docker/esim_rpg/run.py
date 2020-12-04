@@ -1,3 +1,4 @@
+
 """
 This script provides a easy-to-use API for esim_rpg simulator. ESIM_RPG provides
 a toolbox for converting a standard image to a sequence of simulated events. It
@@ -24,18 +25,18 @@ from pathlib import Path
 logging.basicConfig(filename="logging.txt", level=logging.DEBUG)
 
 
-def _get_command(img_name: str, input_dir: str, out_dir: str, conf_file: str) -> str:
-    out_name = img_name.split(".")[0] + ".txt"
+def _get_command(docker_img:str, input_name: str, input_dir: str, out_dir: str, conf_file: str) -> str:
+    out_name = input_name.split(".")[0] + ".txt"
     setup_cmd = "source ~/setupeventsim.sh; roscore"
     source_esim_cmd = "source ~/sim_ws/devel/setup.bash; roscd esim_ros"
-    parameters = f"--flagfile=/home/esim_user/confs/{conf_file} --renderer_texture=/home/esim_user/data/{img_name} --path_to_events_text_file=/home/esim_user/out/{out_name}"
+    parameters = f"--flagfile=/home/esim_user/confs/{conf_file} --renderer_texture=/home/esim_user/data/{input_name} --path_to_events_text_file=/home/esim_user/out/{out_name}"
 
     rosrun_cmd = (
         f"{setup_cmd} & ({source_esim_cmd}; rosrun esim_ros esim_node {parameters})"
     )
     v_flags = f"-v $(pwd)/confs:/home/esim_user/confs -v {out_dir}:/home/esim_user/out -v {input_dir}:/home/esim_user/data"
 
-    docker_cmd = f'docker run --rm -it {v_flags} --user esim_user $(docker build -q .) bash -c "{rosrun_cmd}"'
+    docker_cmd = f'docker run --rm -it {v_flags} --user esim_user {docker_img} bash -c "{rosrun_cmd}"'
 
     return docker_cmd
 
@@ -44,8 +45,12 @@ def _spawn_processing_thread(
     thread_id: int, img_names: list, input_dir: str, out_dir: str, conf_file: str
 ) -> None:
     logging.info(f"Thread {thread_id} computing ...")
+    process = subprocess.Popen("$(docker build -q .)", shell=True, stdout=subprocess.PIPE)
+    docker_img, _ = process.communicate()    
+    __import__("pdb").set_trace()
+
     for img_name in img_names:
-        cmd = _get_command(img_name, input_dir, out_dir, conf_file)
+        cmd = _get_command(img_name, input_dir, out_dir, conf_file, docker_img)
         process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
         output, error = process.communicate()
         logging.debug(output)
