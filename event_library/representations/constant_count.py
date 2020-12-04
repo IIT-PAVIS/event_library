@@ -8,8 +8,9 @@ from matplotlib import pyplot as plt
 
 
 def get_generator(
-    events: np.array, num_events: int, frame_size: Tuple[int, int]) -> np.array:
-    event_count_frame = np.zeros((frame_size[0], frame_size[1], 1))
+    events: np.array, num_events: int, frame_size: Tuple[int, int]
+) -> np.array:
+    event_count_frame = np.zeros((frame_size[0], frame_size[1], 1), dtype="int")
 
     for ind, event in enumerate(events):
         y = int(event[0])

@@ -14,9 +14,12 @@ It receives a numpy array of events of shape (Nx4). Each `row` i is an event tup
 
 """
 
-from . import constant_count, raw, spatiotemporal_voxel_grid
-from typing import Callable, Any, Iterable
+from typing import Any, Callable, Iterable
+
 import numpy as np
+
+from . import constant_count, raw, spatiotemporal_voxel_grid
+
 
 def get_representation(representation_type: str):
     """
@@ -33,7 +36,7 @@ def get_representation(representation_type: str):
     return switcher[representation_type]
 
 
-def get_generator(representation_type: str, **kwargs) -> Callable[[np.array, Any], Iterable[np.array]]:
+def get_generator(representation_type: str, **kwargs) -> Callable[[Any], Iterable]:
     """
     Dispatcher for `get_generator` from an implemented representation. It returns the generator
     for the specified representation type
@@ -47,7 +50,8 @@ def get_generator(representation_type: str, **kwargs) -> Callable[[np.array, Any
 
 
     """
-    def _generator(events):
+
+    def _generator(events: np.array):
         return get_representation(representation_type).get_generator(events, **kwargs)
 
     return _generator
