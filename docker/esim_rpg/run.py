@@ -13,7 +13,7 @@ mkdir output_dir
 chown -R $(whoami):1000 output_dir
 '''
 
-Gianluca Scarpellini - gianluca.scarpellini@iit.it - 2020
+cGianluca Scarpellini - gianluca.scarpellini@iit.it - 2020
 """
 import argparse
 import logging
@@ -51,12 +51,13 @@ def _spawn_processing_thread(
 
     for img_name in img_names:
         cmd = _get_command(docker_img, img_name, input_dir, out_dir, conf_file)
-        process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+        print(cmd)
+        #process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
         output, error = process.communicate()
         logging.debug(output)
-        logging.error(error)
+        logging.error(error )        
 
-    logging.debug(f"Thread {thread_id} Done!")
+    logging.info(f"Thread {thread_id} Done!")
     return None
 
 
@@ -68,6 +69,7 @@ def main():
     parser.add_argument("--img_dir", help="Directory of input images")
     parser.add_argument("--img_names", nargs="+", help="Names of input images")
     parser.add_argument("--out_dir", help="output dir. Please set ownership")
+    parser.add_argument("--sim_duration", type=float, help="Duration of the sim.")    
     parser.add_argument(
         "--conf_file", default="config.conf", help="General configuraion file"
     )
