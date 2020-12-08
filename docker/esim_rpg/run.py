@@ -30,7 +30,7 @@ def _get_command(
     out_name = input_name.split(".")[0] + ".txt"
     setup_cmd = "source ~/setupeventsim.sh; roscore"
     source_esim_cmd = "source ~/sim_ws/devel/setup.bash; roscd esim_ros"
-    parameters = f"--flagfile=/home/esim_user/confs/{conf_file} --renderer_texture=/home/esim_user/data/{input_name} --path_to_events_text_file=/home/esim_user/out/{out_name}"
+    parameters = f"--flagfile=/home/esim_user/confs/{conf_file} --renderer_texture=/home/esim_user/data/{input_name} --calib_filename=/home/esim_user/confs/pinhole_mono_nodistort.yaml --path_to_events_text_file=/home/esim_user/out/{out_name}"
 
     rosrun_cmd = (
         f"{setup_cmd} & ({source_esim_cmd}; rosrun esim_ros esim_node {parameters})"
