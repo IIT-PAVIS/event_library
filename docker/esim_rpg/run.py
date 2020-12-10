@@ -24,6 +24,8 @@ from pathlib import Path
 
 logging.basicConfig(level=logging.DEBUG)
 
+logging.basicConfig(level=logging.DEBUG)
+
 
 def _get_command(
     container_name: str, input_name: str, conf_file: str, out_path: str
@@ -33,7 +35,6 @@ def _get_command(
 
     source_esim_cmd = "source ~/sim_ws/devel/setup.bash; roscd esim_ros"
     rosrun_cmd = f"{source_esim_cmd}; rosrun esim_ros esim_node {parameters}"
-
     docker_cmd = f'docker exec -d {container_name} bash -c "{rosrun_cmd}"'
     return docker_cmd
 
@@ -50,6 +51,7 @@ def _clean_existing_containers():
 
 def _run_container(input_dir: str, out_dir: str) -> str:
     setup_cmd = '"source ~/setupeventsim.sh; roscore"'
+
     v_flags = f"-v $(pwd)/confs:/home/esim_user/confs -v {out_dir}:/home/esim_user/out -v {input_dir}:/home/esim_user/data"
     docker_cmd = f"docker run --rm -it -d {v_flags} --user esim_user $(docker build                   -q .) bash -c {setup_cmd}"
     return _run_cmd(docker_cmd)
