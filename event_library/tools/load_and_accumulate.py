@@ -18,7 +18,7 @@ def accumulate_and_save(
     os.makedirs(output_path, exist_ok=True)
     representation = representations.get_representation(representation_name)
 
-    for i, frame in enumerate(representation.get_gqenerator(events=events, **kwargs)):
+    for i, frame in enumerate(representation.get_generator(events=events, **kwargs)):
         # debug only
         dist = frame / frame.max()
         cv2.imshow("test1", dist)
