@@ -2,7 +2,6 @@
 Event-library
 """
 
-
 __author__ = "gscarpellini"
 __version__ = "0.3"
 __author_email__ = "gianluca.scarpellini@iit.it"
@@ -25,6 +24,8 @@ if __EL_SETUP__:
     # We are not importing the rest of the lightning during the build process, as it may not be compiled yet
 else:
     import torch
+
+    from event_library import utils
 
     if torch.cuda.is_available():
         DEVICE = "cuda"
