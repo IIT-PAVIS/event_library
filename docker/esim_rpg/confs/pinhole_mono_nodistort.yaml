@@ -5,13 +5,13 @@ cameras:
     label: dvs0
     id: a0fba5412e961934d842d3a2a78e5cba
     line-delay-nanoseconds: 0
-    image_height: 180
-    image_width: 240
+    image_height: 211
+    image_width: 84
     type: pinhole
     intrinsics:
       cols: 1
       rows: 4
-      data: [200.0, 200.0, 120.0, 90.0]
+      data: [44.0, 44.0, 44.0, 105.0]
     distortion:
       type: none
       parameters:
