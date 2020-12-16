@@ -11,7 +11,7 @@ torchvision = "*"
 hydra-core = "*"
 matplotlib = "*"
 tqdm = "*"
-esim-py = {file = "third_parties/esim_py-0.0.1-cp38-cp38-linux_x86_64.whl"}
+esim-py = {file = "file:///home/gianlucascarpellini/dev/event_library/third_parties/esim_py-0.0.1-cp38-cp38-linux_x86_64.whl"}
 pytest = "*"
 yapf = "*"
 black = "*"
@@ -23,6 +23,7 @@ Sphinx = "==2.4.4"
 pre-commit = "*"
 pipfile = "*"
 isort = "*"
+numpy = "*"
 
 [requires]
 python_version = "3.8"
