@@ -25,11 +25,15 @@ def install_subs():
     base_third_parties_dir = "./third_parties"
     for sub_mod in glob.glob(os.path.join(base_third_parties_dir, "*.whl")):
         print(f"Installing {sub_mod}")
-        subprocess.call([sys.executable, "-m",
-                         "pip", "install", sub_mod])
-        subdirs = [os.path.join(base_third_parties_dir, o) for o in os.listdir(base_third_parties_dir) if os.path.isdir(os.path.join(directory, o))]
-        
+        subprocess.call([sys.executable, "-m", "pip", "install", sub_mod])
+        subdirs = [
+            os.path.join(base_third_parties_dir, o)
+            for o in os.listdir(base_third_parties_dir)
+            if os.path.isdir(os.path.join(base_third_parties_dir, o))
+        ]
+
         for sub_mod in subdirs:
+
             submod_setup_path = sub_mod + "/setup.py"
             if os.path.exists(submod_setup_path):
                 # Run submodule setup.py file
@@ -45,29 +49,24 @@ def install_subs():
                 )
                 long_description, version = get_info()
 
-     setuptools.setup(
-        name="event_library",
-         version="0.2",
-         author="Gianluca Scarpellini",
-         author_email="gianluca.scarpellini@iit.it",
-         description="Event library",
-         long_description=long_description,
-         long_description_content_type="text/markdown",
-         url="https://github.com/gianscarpe/event_library",
-         packages=setuptools.find_packages(exclude=("tests", "scripts")),
-         install_requires=[
-             "opencv-python",
-             "hydra-core",
-             "matplotlib",
-             "numpy"
-         ],
-         classifiers=[
-             "Programming Language :: Python :: 3",
-             "License :: OSI Approved :: GPL License",
-             "Operating System :: Linux",
-         ],
-         python_requires=">=3.8",
-     )
 
-     install_subs()
+setuptools.setup(
+    name="event_library",
+    version="0.2",
+    author="Gianluca Scarpellini",
+    author_email="gianluca.scarpellini@iit.it",
+    description="Event library",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/gianscarpe/event_library",
+    packages=setuptools.find_packages(exclude=("tests", "scripts")),
+    install_requires=["opencv-python", "hydra-core", "matplotlib", "numpy"],
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: GPL License",
+        "Operating System :: Linux",
+    ],
+    python_requires=">=3.8",
+)
 
+install_subs()

@@ -8,7 +8,7 @@ Clone the repo:
 
 Install event_library:
 ```
-python -m pip install .
+python setup.py install
 ```
 
 ## Contributing
