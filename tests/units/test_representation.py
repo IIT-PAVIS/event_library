@@ -50,7 +50,7 @@ class TestConstantCountTimeBatch:
     )
     def test_generator(self, n_generated, num_events, H, W):
         events = mock_events(n_generated, H, W)
-        time_batch = 50  # Hz
+        time_batch = 1  # Hz
         generator = constant_count_fixed_batch.get_generator(
             events, num_events, (H, W), time_batch
         )
@@ -60,12 +60,11 @@ class TestConstantCountTimeBatch:
         for event_frame in generator:
             count_generated_frames += 1
             assert event_frame.shape == (H, W, 1)
-
         assert expected_frames_count == count_generated_frames
 
     def _count_frames_in_times(self, times: np.array, time_batch: float):
         time_start = times[0]
-        time_batch_ns = time_batch * 1e10
+        time_batch_ns = time_batch * 1e9
         result = 0
         for t in times:
             if t > time_start + time_batch_ns:
