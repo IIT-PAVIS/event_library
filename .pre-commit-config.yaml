@@ -11,13 +11,6 @@ repos:
         entry: pipenv run isort
         types: [python]
 
-      - id: black
-        name: black
-        stages: [commit]
-        language: system
-        entry: pipenv run black
-        types: [python]
-
       - id: flake8
         name: flake8
         stages: [commit]

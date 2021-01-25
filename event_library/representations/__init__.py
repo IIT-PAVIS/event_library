@@ -9,7 +9,7 @@ It receives a numpy array of events of shape (Nx4). Each `row` i is an event tup
 
 - events[i][0] = y axis
 - events[i][1] = x axis
-- events[i][2] = timestamp
+- events[i][2] = timestamp in ns
 - events[i][3] = boolean value (increasing or decreasing light intensity change)
 
 """
@@ -18,7 +18,7 @@ from typing import Any, Callable, Iterable
 
 import numpy as np
 
-from . import constant_count, pos_neg, raw, spatiotemporal_voxel_grid
+from . import constant_count, constant_count_fixed_batch, pos_neg, raw, spatiotemporal_voxel_grid
 
 
 def get_representation(representation_type: str):
@@ -32,6 +32,7 @@ def get_representation(representation_type: str):
         "voxel": spatiotemporal_voxel_grid,
         "raw": raw,
         "pos-neg": pos_neg,
+        "constant-count-fixed-batch": constant_count_fixed_batch,
     }
 
     return switcher[representation_type]
