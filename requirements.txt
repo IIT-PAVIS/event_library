@@ -1,7 +1,7 @@
 torch
 torchvision
-hydra - core
+hydra-core
 matplotlib
 tqdm
 numpy
-sk - video
+sk-video
