@@ -40,7 +40,7 @@ sphinx-build -b html docs/source docs/build
 #### Example: conversion from `avi` files to `events`
 ```
 python scripts/generate.py input_dir={INPUT_DIR} output_dir={OUTPUT_DIR}
-upsample=true extract=true emulate=true representation=voxel  show_debug_images=2
+upsample=true xetract=true emulate=true representation=voxel  show_debug_images=2
 
 ```
 
