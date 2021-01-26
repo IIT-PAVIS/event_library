@@ -51,9 +51,7 @@ class TestConstantCountTimeBatch:
     def test_generator(self, n_generated, num_events, H, W):
         events = mock_events(n_generated, H, W)
         time_batch = 1  # Hz
-        generator = constant_count_fixed_batch.get_generator(
-            events, num_events, (H, W), time_batch
-        )
+        generator = constant_count_fixed_batch.get_generator(events, (H, W), time_batch)
         expected_frames_count = self._count_frames_in_times(events[:, 2], time_batch)
 
         count_generated_frames = 0
@@ -70,7 +68,7 @@ class TestConstantCountTimeBatch:
             if t > time_start + time_batch_ns:
                 result += 1
                 time_start = t
-        return result
+        return result + 1
 
 
 class TestRaw:
