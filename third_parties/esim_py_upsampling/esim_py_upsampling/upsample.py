@@ -1,24 +1,46 @@
 import argparse
 import os
+from datetime import datetime
+from multiprocessing.pool import ThreadPool
 
 from . import SUPERSLO_CKPT
 from .utils import Upsampler
 
 
-def upsample(input_dir, output_dir, device):
+def upsample(input_dir, output_dir, device, n_threads=1):
+    breakpoint()
     if os.path.exists(output_dir):
         print("Upsampling already exists!")
         return
 
     try:
-        upsampler = Upsampler(
-            input_dir=input_dir,
-            output_dir=output_dir,
-            device=device,
-            ckpt_dir=SUPERSLO_CKPT,
-        )
-        upsampler.upsample()
-    except:  # noqa: E722
+        os.makedirs(SUPERSLO_CKPT, exist_ok=True)
+        ckpt_file = os.path.join(SUPERSLO_CKPT, "SuperSloMo.ckpt")
+
+        if not os.path.exists(ckpt_file):
+            Upsampler._download_net(ckpt_file)
+
+        # Preparing
+        assert os.path.isdir(input_dir), "The input directory must exist"
+        assert not os.path.exists(output_dir), "The output directory must not exist"
+        Upsampler._prepare_output_dir(input_dir, output_dir)
+
+        # get inputs
+        sequences = Upsampler.get_sequences(input_dir, output_dir)
+        breakpoint()
+
+        # pool of threads
+        def _upsample_sequence(seq):
+            return Upsampler(device=device, ckpt_file=ckpt_file).upsample_sequence(
+                **seq
+            )
+
+        with ThreadPool(n_threads) as pool:
+            start = datetime.now()
+            pool.map(_upsample_sequence, sequences)
+            print(f"Total time: {datetime.now() - start}")
+    except Exception as ex:  # noqa: E722
+        print(ex)
         print(
             f"Upsampling failed, but directory '{output_dir}' was created. Remove it if you need to try again "
         )

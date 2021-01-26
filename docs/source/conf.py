@@ -6,13 +6,14 @@
 
 # -- Path setup --------------------------------------------------------------
 
+import builtins
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
 import sys
-import builtins
 
 sys.path.insert(0, os.path.abspath("../.."))
 PATH_HERE = os.path.abspath(os.path.dirname(__file__))
@@ -71,7 +72,7 @@ MOCK_MANUAL_PACKAGES = [
     # packages with different package name compare to import name
     "hydra",
     "cv2",
-    "esim_py"
+    "esim_py",
 ]
 autodoc_mock_imports = MOCK_PACKAGES + MOCK_MANUAL_PACKAGES
 

@@ -26,3 +26,12 @@ repos:
         entry: pipenv run mypy event_library
         types: [python]
         pass_filenames: false
+            
+      - id: black
+        name: black
+        stages: [commit]
+        language: system
+        types: [python]
+        entry: pipenv run black .
+          
+

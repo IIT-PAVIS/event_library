@@ -3,13 +3,13 @@ import os
 
 import hydra
 import numpy as np
+from esim_py_upsampling import upsample
 from omegaconf import DictConfig
 from tqdm import tqdm
 
 import event_library as el
 import event_library.representations as representations
 from event_library.generator import SimulatorWrapper
-from third_parties.esim_py_upsampling import upsample
 
 # A logger for this file
 log = logging.getLogger(__name__)
@@ -81,6 +81,8 @@ def main(cfg: DictConfig):
     do_extract = cfg.extract
     do_upsample = cfg.upsample
     do_emulation = cfg.emulate
+
+    os.makedirs(tmp_dir, exist_ok=True)
 
     if input_dir is None and base_output_dir is None:
         log.error("Specify INPUT! and OUTPUT")

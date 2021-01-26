@@ -40,7 +40,7 @@ sphinx-build -b html docs/source docs/build
 #### Example: conversion from `avi` files to `events`
 ```
 python scripts/generate.py input_dir={INPUT_DIR} output_dir={OUTPUT_DIR}
-upsample=true xetract=true emulate=true representation=voxel  show_debug_images=2
+upsample=true extract=true emulate=true representation=voxel  show_debug_images=2
 
 ```
 
@@ -57,7 +57,7 @@ Tree:
 #### Example: conversion from `png` files to `events`
 ```
 python scripts/generate.py frames_dir={FRAME_VIDEO_DIR} output_dir={OUTPUT_DIR}
-upsample=true extract=false emulate=true representation=voxel  show_debug_images=2
+upsample=true extract=false emulate=true representation=voxel
 ```
 
 Each video has a `imgs` directory, where you put the set of frames. Create a

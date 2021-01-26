@@ -9,7 +9,7 @@ setuptools.setup(
         "matplotlib",
         "numpy",
         "torch",
-        "torchvision"
+        "torchvision",
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

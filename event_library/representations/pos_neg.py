@@ -17,7 +17,7 @@ def get_generator(
     for ind, event in enumerate(events):
         y = int(event[0])
         x = int(event[1])
-        p = int(event[3])
+        p = int(event[3]) > 0
         event_frame[x, y, p] += 1
 
         if ind % num_events == 0:

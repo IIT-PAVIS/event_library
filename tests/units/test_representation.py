@@ -13,8 +13,8 @@ from event_library.representations import (
 def mock_events(n_events, H, W) -> np.array:
     widths = np.random.randint(0, W, (n_events, 1))
     heights = np.random.randint(0, H, (n_events, 1))
-    polarities = np.random.randint(0, 1, (n_events, 1))
-    times = np.sort(np.random.rand(n_events, 1), axis=0) * 1e10
+    polarities = np.random.choice([-1, 1], (n_events, 1))
+    times = abs(np.sort(np.random.rand(n_events, 1), axis=0)) * 10
 
     return np.stack([widths, heights, times, polarities], axis=1)
 
@@ -62,9 +62,9 @@ class TestConstantCountTimeBatch:
             assert event_frame.shape == (H, W, 1)
         assert expected_frames_count == count_generated_frames
 
-    def _count_frames_in_times(self, times: np.array, time_batch: float):
+    def _count_frames_in_times(self, times: np.array, frequence: float):
         time_start = times[0]
-        time_batch_ns = time_batch * 1e9
+        time_batch_ns = 1 / frequence
         result = 0
         for t in times:
             if t > time_start + time_batch_ns:

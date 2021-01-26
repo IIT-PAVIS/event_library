@@ -18,7 +18,13 @@ from typing import Any, Callable, Iterable
 
 import numpy as np
 
-from . import constant_count, constant_count_fixed_batch, pos_neg, raw, spatiotemporal_voxel_grid
+from . import (
+    constant_count,
+    constant_count_fixed_batch,
+    pos_neg,
+    raw,
+    spatiotemporal_voxel_grid,
+)
 
 
 def get_representation(representation_type: str):

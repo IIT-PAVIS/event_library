@@ -11,11 +11,7 @@ setuptools.setup(
     author="Gian Luca Bailo",
     packages=setuptools.find_packages(),
     entry_points={"console_scripts": ["stream_camera = event_camera_stream:main"]},
-    install_requires=[
-        "opencv-python",
-        "pyturboJpeg",
-        "requests"
-    ],
+    install_requires=["opencv-python", "pyturboJpeg", "requests"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GPL License",
@@ -23,4 +19,3 @@ setuptools.setup(
     ],
     python_requires=">=3.8",
 )
-

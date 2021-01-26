@@ -26,28 +26,28 @@ def install_subs():
     for sub_mod in glob.glob(os.path.join(base_third_parties_dir, "*.whl")):
         print(f"Installing {sub_mod}")
         subprocess.call([sys.executable, "-m", "pip", "install", sub_mod])
-        subdirs = [
-            os.path.join(base_third_parties_dir, o)
-            for o in os.listdir(base_third_parties_dir)
-            if os.path.isdir(os.path.join(base_third_parties_dir, o))
-        ]
+    subdirs = [
+        os.path.join(base_third_parties_dir, o)
+        for o in os.listdir(base_third_parties_dir)
+        if os.path.isdir(os.path.join(base_third_parties_dir, o))
+    ]
 
-        for sub_mod in subdirs:
+    for sub_mod in subdirs:
 
-            submod_setup_path = sub_mod + "/setup.py"
-            if os.path.exists(submod_setup_path):
-                # Run submodule setup.py file
-                print(f"Installing {sub_mod}")
-                subprocess.call(
-                    [
-                        sys.executable,
-                        "-m",
-                        "pip",
-                        "install",
-                        os.getcwd() + "/" + sub_mod + "/",
-                    ]
-                )
-                long_description, version = get_info()
+        submod_setup_path = sub_mod + "/setup.py"
+        if os.path.exists(submod_setup_path):
+            # Run submodule setup.py file
+            print(f"Installing {sub_mod}")
+            subprocess.call(
+                [
+                    sys.executable,
+                    "-m",
+                    "pip",
+                    "install",
+                    os.getcwd() + "/" + sub_mod + "/",
+                ]
+            )
+            long_description, version = get_info()
 
 
 setuptools.setup(

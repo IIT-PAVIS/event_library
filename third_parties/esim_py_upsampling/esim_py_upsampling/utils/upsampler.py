@@ -3,6 +3,7 @@ import os
 import shutil
 import urllib
 import warnings
+from multiprocessing.pool import ThreadPool
 from typing import List
 
 import cv2
@@ -20,35 +21,30 @@ from .utils import get_sequence_or_none
 class Upsampler:
     _timestamps_filename = "timestamps.txt"
 
-    def __init__(self, input_dir: str, output_dir: str, device: str, ckpt_dir: str):
-        assert os.path.isdir(input_dir), "The input directory must exist"
-        assert not os.path.exists(output_dir), "The output directory must not exist"
-
-        self._prepare_output_dir(input_dir, output_dir)
-        self.src_dir = input_dir
-        self.dest_dir = output_dir
-
+    def __init__(self, device: str, ckpt_file: str):
         self.device = torch.device(device)
-        os.makedirs(ckpt_dir, exist_ok=True)
-        self._load_net_from_checkpoint(ckpt_dir)
-
         negmean = [x * -1 for x in mean]
         self.negmean = self._move_to_device(
             torch.Tensor([x * -1 for x in mean]).view(3, 1, 1), self.device
         )
         revNormalize = transforms.Normalize(mean=negmean, std=std)
         self.TP = transforms.Compose([revNormalize])
+        self.ckpt_file = ckpt_file
+        self._load_net_from_checkpoint()
 
-    def _load_net_from_checkpoint(self, ckpt_file):
-        if not os.path.exists(ckpt_file):
+    @staticmethod
+    def _download_net(ckpt_file):
+        try:
             print("Downloading SuperSlowMo checkpoint to {} ...".format(ckpt_file))
-            g = urllib.request.urlopen(
-                "http://rpg.ifi.uzh.ch/data/VID2E/SuperSloMo.ckpt"
-            )
-            __import__("pdb").set_trace()
+            g = urllib.request.urlopen("http://rpg.ifi.uzh.ch/data/VID2E/Supermom.ckpt")
             with open(ckpt_file, "w+b") as ckpt:
                 ckpt.write(g.read())
             print("Done with downloading!")
+        except Exception as ex:
+            print(ex)
+
+    def _load_net_from_checkpoint(self):
+        ckpt_file = self.ckpt_file
         assert os.path.isfile(ckpt_file)
 
         self.flowComp = UNet(6, 4)
@@ -65,6 +61,7 @@ class Upsampler:
         checkpoint = torch.load(ckpt_file, map_location=self.device)
         self.ArbTimeFlowIntrp.load_state_dict(checkpoint["state_dictAT"])
         self.flowComp.load_state_dict(checkpoint["state_dictFC"])
+        print("LOADED!")
 
     def get_flowBackWarp_module(self, width: int, height: int):
         module = self.flowBackWarp_dict.get((width, height))
@@ -75,20 +72,31 @@ class Upsampler:
         assert module is not None
         return module
 
-    def upsample(self):
+    @staticmethod
+    def get_sequences(src_dir, dest_dir):
+
         sequence_counter = 0
-        for src_absdirpath, dirnames, filenames in os.walk(self.src_dir):
+
+        sequences = []
+        for src_absdirpath, dirnames, filenames in os.walk(src_dir):
             sequence = get_sequence_or_none(src_absdirpath)
             if sequence is None:
                 continue
             sequence_counter += 1
             print("Processing sequence number {}".format(sequence_counter))
-            reldirpath = os.path.relpath(src_absdirpath, self.src_dir)
-            dest_imgs_dir = os.path.join(self.dest_dir, reldirpath, imgs_dirname)
+            reldirpath = os.path.relpath(src_absdirpath, src_dir)
+            dest_imgs_dir = os.path.join(dest_dir, reldirpath, imgs_dirname)
             dest_timestamps_filepath = os.path.join(
-                self.dest_dir, reldirpath, self._timestamps_filename
+                dest_dir, reldirpath, Upsampler._timestamps_filename
             )
-            self.upsample_sequence(sequence, dest_imgs_dir, dest_timestamps_filepath)
+            sequences.append(
+                {
+                    "sequence": sequence,
+                    "dest_imgs_dir": dest_imgs_dir,
+                    "dest_timestamps_filepath": dest_timestamps_filepath,
+                }
+            )
+        return sequences
 
     def upsample_sequence(
         self, sequence: Sequence, dest_imgs_dir: str, dest_timestamps_filepath: str
@@ -132,7 +140,8 @@ class Upsampler:
                 idx += 1
         self._write_timestamps(timestamps_list, dest_timestamps_filepath)
 
-    def _prepare_output_dir(self, src_dir: str, dest_dir: str):
+    @staticmethod
+    def _prepare_output_dir(src_dir: str, dest_dir: str):
         # Copy directory structure.
         def ignore_files(directory, files):
             return [f for f in files if os.path.isfile(os.path.join(directory, f))]

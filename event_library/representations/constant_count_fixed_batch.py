@@ -8,11 +8,12 @@ from matplotlib import pyplot as plt
 
 
 def get_generator(
-    events: np.array, num_events: int, frame_size: Tuple[int, int], time_batch: float
+    events: np.array, frame_size: Tuple[int, int], frequence: float
 ) -> np.array:
     event_count_frame = np.zeros((frame_size[0], frame_size[1], 1), dtype="int")
     time_start = 0
-    time_batch = time_batch * 1e9  # Convert Hz to ns range
+    time_batch = 1 / frequence  # Convert from Hz
+    breakpoint()
     for ind, event in enumerate(events):
         y = int(event[0])
         x = int(event[1])
@@ -22,6 +23,7 @@ def get_generator(
             yield event_count_frame
             time_start = ti
             event_count_frame = np.zeros_like(event_count_frame)
+    yield event_count_frame
 
 
 def display(frame: np.array):
