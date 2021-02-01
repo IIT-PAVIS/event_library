@@ -27,6 +27,7 @@ ptvsd = "*"
 event-library = {editable = true, path = "."}
 sk-video = "*"
 black = "*"
+scikit-video = "*"
 
 [requires]
 python_version = "3.8"

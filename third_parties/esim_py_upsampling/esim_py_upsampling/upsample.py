@@ -8,7 +8,6 @@ from .utils import Upsampler
 
 
 def upsample(input_dir, output_dir, device, n_threads=1):
-    breakpoint()
     if os.path.exists(output_dir):
         print("Upsampling already exists!")
         return
@@ -19,6 +18,8 @@ def upsample(input_dir, output_dir, device, n_threads=1):
 
         if not os.path.exists(ckpt_file):
             Upsampler._download_net(ckpt_file)
+            if not os.path.exists(ckpt_file):
+                raise Exception("MODEL not found. Please provide it manually")
 
         # Preparing
         assert os.path.isdir(input_dir), "The input directory must exist"
@@ -27,7 +28,6 @@ def upsample(input_dir, output_dir, device, n_threads=1):
 
         # get inputs
         sequences = Upsampler.get_sequences(input_dir, output_dir)
-        breakpoint()
 
         # pool of threads
         def _upsample_sequence(seq):

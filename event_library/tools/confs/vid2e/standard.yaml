@@ -7,3 +7,4 @@ params:
   log_eps: 1e-3
   use_log: true
   batch_size: 3000
+  

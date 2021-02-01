@@ -25,9 +25,11 @@ def _do_extraction(cfg, input_dir, tmp_frames_dir):
     log.info("Extraction completed")
 
 
-def _do_upsample(tmp_frames_dir, tmp_upsample_dir):
+def _do_upsample(tmp_frames_dir, tmp_upsample_dir, n_threads=6):
     log.info("Upsampling")
-    upsample.upsample(tmp_frames_dir, tmp_upsample_dir, device=DEVICE)
+    upsample.upsample(
+        tmp_frames_dir, tmp_upsample_dir, device=DEVICE, n_threads=n_threads
+    )
     log.info("Upsampling completed")
 
 

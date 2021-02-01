@@ -67,3 +67,4 @@ config.yaml
 src/
 outputs
 /.#deploy_gitlab.sh
+third_parties/esim_py_upsampling/esim_py_upsampling/models/*
