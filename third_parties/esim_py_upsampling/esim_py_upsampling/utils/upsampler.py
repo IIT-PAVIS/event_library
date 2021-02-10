@@ -99,7 +99,11 @@ class Upsampler:
         return sequences
 
     def upsample_sequence(
-        self, sequence: Sequence, dest_imgs_dir: str, dest_timestamps_filepath: str
+        self,
+        sequence: Sequence,
+        dest_imgs_dir: str,
+        dest_timestamps_filepath: str,
+        output_size: (int, int),
     ):
         os.makedirs(dest_imgs_dir, exist_ok=True)
         timestamps_list = list()
@@ -136,7 +140,7 @@ class Upsampler:
 
             timestamps_list += timestamps
             for frame in total_frames:
-                self._write_img(frame, idx, dest_imgs_dir)
+                self._write_img(frame, idx, dest_imgs_dir, output_size)
                 idx += 1
         self._write_timestamps(timestamps_list, dest_timestamps_filepath)
 
@@ -149,10 +153,14 @@ class Upsampler:
         shutil.copytree(src_dir, dest_dir, ignore=ignore_files)
 
     @staticmethod
-    def _write_img(img: np.ndarray, idx: int, imgs_dir: str):
+    def _write_img(img: np.ndarray, idx: int, imgs_dir: str, size: (int, int)):
         assert os.path.isdir(imgs_dir)
         path = os.path.join(imgs_dir, "%08d.png" % idx)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        if size is None:
+            size = img.shape
+        img = cv2.resize(img, (size[1], size[0]))
+
         cv2.imwrite(path, img)
 
     @staticmethod
@@ -164,6 +172,7 @@ class Upsampler:
     def _to_numpy_image(img: torch.Tensor):
         img = np.clip(255 * img.cpu().numpy(), 0, 255).astype(np.uint8)
         img = np.transpose(img, (0, 2, 3, 1))
+
         return img
 
     def _upsample_adaptive(
@@ -195,6 +204,7 @@ class Upsampler:
                 F_t_1 = fCoeff[2] * F_0_1 + fCoeff[3] * F_1_0
 
                 height, width = I0.shape[-2:]
+
                 flow_back_warp = self.get_flowBackWarp_module(width, height)
                 g_I0_F_t_0 = flow_back_warp(I0, F_t_0)
                 g_I1_F_t_1 = flow_back_warp(I1, F_t_1)

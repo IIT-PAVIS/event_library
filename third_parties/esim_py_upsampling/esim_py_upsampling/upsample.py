@@ -7,7 +7,7 @@ from . import SUPERSLO_CKPT
 from .utils import Upsampler
 
 
-def upsample(input_dir, output_dir, device, n_threads=1):
+def upsample(input_dir, output_dir, device, output_size=None, n_threads=1):
     if os.path.exists(output_dir):
         print("Upsampling already exists!")
         return
@@ -32,7 +32,7 @@ def upsample(input_dir, output_dir, device, n_threads=1):
         # pool of threads
         def _upsample_sequence(seq):
             return Upsampler(device=device, ckpt_file=ckpt_file).upsample_sequence(
-                **seq
+                **seq, output_size=output_size
             )
 
         with ThreadPool(n_threads) as pool:

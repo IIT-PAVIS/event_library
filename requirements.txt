@@ -5,4 +5,4 @@ matplotlib
 tqdm
 numpy
 sk-video
-
+hyperopt

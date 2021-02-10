@@ -28,6 +28,9 @@ event-library = {editable = true, path = "."}
 sk-video = "*"
 black = "*"
 scikit-video = "*"
+hyperopt = "*"
+aedat = "*"
+aermanager = "*"
 
 [requires]
 python_version = "3.8"

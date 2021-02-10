@@ -60,7 +60,14 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/gianscarpe/event_library",
     packages=setuptools.find_packages(exclude=("tests", "scripts")),
-    install_requires=["opencv-python", "hydra-core", "matplotlib", "numpy", "torch"],
+    install_requires=[
+        "opencv-python",
+        "hydra-core",
+        "matplotlib",
+        "numpy",
+        "torch",
+        "snntoolbox",
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GPL License",
