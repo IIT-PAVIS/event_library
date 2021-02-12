@@ -3,17 +3,25 @@ import os
 from datetime import datetime
 from multiprocessing.pool import ThreadPool
 
+import numpy as np
+import torch
+
 from . import SUPERSLO_CKPT
 from .utils import Upsampler
 
 
-def upsample(input_dir, output_dir, device, output_size=None, n_threads=1):
-    if os.path.exists(output_dir):
-        print("Upsampling already exists!")
-        return
+def get_freer_gpu():
+    os.system('nvidia-smi -q -d Memory |grep -A4 GPU|grep Free >tmp')
+    memory_available = [int(x.split()[2]) for x in open('tmp', 'r').readlines()]
+    return np.argmax(memory_available)
 
+
+def upsample(input_dir, output_dir, output_size=None, n_threads=1):
     try:
         os.makedirs(SUPERSLO_CKPT, exist_ok=True)
+        assert os.path.isdir(input_dir), "The input directory must exist"
+        assert not os.path.exists(output_dir), "The output directory must not exist"
+
         ckpt_file = os.path.join(SUPERSLO_CKPT, "SuperSloMo.ckpt")
 
         if not os.path.exists(ckpt_file):
@@ -21,16 +29,13 @@ def upsample(input_dir, output_dir, device, output_size=None, n_threads=1):
             if not os.path.exists(ckpt_file):
                 raise Exception("MODEL not found. Please provide it manually")
 
-        # Preparing
-        assert os.path.isdir(input_dir), "The input directory must exist"
-        assert not os.path.exists(output_dir), "The output directory must not exist"
-        Upsampler._prepare_output_dir(input_dir, output_dir)
-
         # get inputs
         sequences = Upsampler.get_sequences(input_dir, output_dir)
-
+        Upsampler._prepare_output_dir(input_dir, output_dir)
         # pool of threads
         def _upsample_sequence(seq):
+            device_id = get_freer_gpu()
+            device = torch.device(f"cuda:{device_id}")
             return Upsampler(device=device, ckpt_file=ckpt_file).upsample_sequence(
                 **seq, output_size=output_size
             )

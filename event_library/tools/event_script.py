@@ -33,7 +33,7 @@ def accumulate_and_save(
     events = utils.load_from_file(input_path, 1000000000000)
     os.makedirs(output_path, exist_ok=True)
     representation = representations.get_representation(representation_name)
-
+    
     for i, frame in enumerate(representation.get_generator(events=events, **kwargs)):
         cv2.imwrite(f"{output_path}/frame{i:04d}.png", normalized_3sigma(frame))
 
@@ -56,7 +56,6 @@ def main():
     output_dir = args.output_dir
     representation = args.representation
     args = {"num_events": 7500, "frame_size": (args.height, args.width)}
-
     for input_path in input_files:
         out_name = Path(input_path).name.split(".")[0]
 

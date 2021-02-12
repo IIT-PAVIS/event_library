@@ -15,7 +15,7 @@ from tqdm import tqdm
 from . import Sequence
 from .const import imgs_dirname, mean, std
 from .model import UNet, backWarp
-from .utils import get_sequence_or_none
+from .utils import VideoSequence, get_sequence_or_none, is_video_file
 
 
 class Upsampler:
@@ -81,22 +81,46 @@ class Upsampler:
         for src_absdirpath, dirnames, filenames in os.walk(src_dir):
             sequence = get_sequence_or_none(src_absdirpath)
             if sequence is None:
-                continue
-            sequence_counter += 1
-            print("Processing sequence number {}".format(sequence_counter))
-            reldirpath = os.path.relpath(src_absdirpath, src_dir)
-            dest_imgs_dir = os.path.join(dest_dir, reldirpath, imgs_dirname)
-            dest_timestamps_filepath = os.path.join(
-                dest_dir, reldirpath, Upsampler._timestamps_filename
-            )
-            sequences.append(
-                {
-                    "sequence": sequence,
-                    "dest_imgs_dir": dest_imgs_dir,
-                    "dest_timestamps_filepath": dest_timestamps_filepath,
-                }
-            )
+                video_files = [f for f in filenames if is_video_file(f)]
+                for video_file in video_files:
+
+                    sequence_counter += 1
+                    print("Processing sequence number {}".format(sequence_counter))
+
+                    sequence = VideoSequence(os.path.join(src_absdirpath, video_file))
+                    reldirpath = os.path.relpath(src_absdirpath, src_dir)
+                    video_dir = os.path.splitext(video_file)[0]
+
+                    sequences.append(
+                        Upsampler._get_sequence(
+                            sequence,
+                            os.path.join(src_absdirpath, video_dir),
+                            src_dir,
+                            dest_dir,
+                        )
+                    )
+            else:
+                sequence_counter += 1
+                print("Processing sequence number {}".format(sequence_counter))
+
+                sequences.append(
+                    Upsampler._get_sequence(sequence, src_absdirpath, src_dir, dest_dir)
+                )
         return sequences
+
+    @staticmethod
+    def _get_sequence(sequence, src_absdirpath, src_dir, dest_dir):
+
+        reldirpath = os.path.relpath(src_absdirpath, src_dir)
+        dest_imgs_dir = os.path.join(dest_dir, reldirpath, imgs_dirname)
+        dest_timestamps_filepath = os.path.join(
+            dest_dir, reldirpath, Upsampler._timestamps_filename
+        )
+        return {
+            "sequence": sequence,
+            "dest_imgs_dir": dest_imgs_dir,
+            "dest_timestamps_filepath": dest_timestamps_filepath,
+        }
 
     def upsample_sequence(
         self,

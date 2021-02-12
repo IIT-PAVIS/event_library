@@ -14,17 +14,11 @@ from event_library.generator import SimulatorWrapper, find_best_events_parameter
 # A logger for this file
 log = logging.getLogger(__name__)
 
-DEVICE = el.DEVICE
 
-
-def _do_upsample(tmp_frames_dir, tmp_upsample_dir, output_size, n_threads=6):
+def _do_upsample(tmp_frames_dir, tmp_upsample_dir, output_size, n_threads=12):
     log.info("Upsampling")
     upsample.upsample(
-        tmp_frames_dir,
-        tmp_upsample_dir,
-        device=DEVICE,
-        n_threads=n_threads,
-        output_size=output_size,
+        tmp_frames_dir, tmp_upsample_dir, n_threads=n_threads, output_size=output_size,
     )
     log.info("Upsampling completed")
 

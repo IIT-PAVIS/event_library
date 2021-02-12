@@ -13,7 +13,7 @@ import pathlib
 import numpy as np
 
 
-def load_from_file(file_path: str, *kwargs) -> np.array:
+def load_from_file(file_path: str, **kwargs) -> np.array:
     ext = pathlib.Path(file_path).suffix
     switcher = {
         ".txt": load_from_txt,
