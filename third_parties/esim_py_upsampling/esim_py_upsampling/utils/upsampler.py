@@ -85,8 +85,6 @@ class Upsampler:
                 for video_file in video_files:
 
                     sequence_counter += 1
-                    print("Processing sequence number {}".format(sequence_counter))
-
                     sequence = VideoSequence(os.path.join(src_absdirpath, video_file))
                     reldirpath = os.path.relpath(src_absdirpath, src_dir)
                     video_dir = os.path.splitext(video_file)[0]

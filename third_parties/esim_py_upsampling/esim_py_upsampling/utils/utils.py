@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Union
 
 from .const import fps_filename, imgs_dirname, video_formats
-from .dataset import ImageSequence, Sequence, VideoSequence
+from .dataset import ImageSequence, Sequence, videosequence
 
 
 def is_video_file(filepath: str):

@@ -3,6 +3,7 @@ from fractions import Fraction
 from pathlib import Path
 from typing import Union
 
+import cv2
 import skvideo.io
 import torch
 import torchvision.transforms as transforms
@@ -63,7 +64,7 @@ class ImageSequence(Sequence):
     def _pil_loader(path):
         with open(path, "rb") as f:
             img = Image.open(f)
-            img = img.convert("RGB")
+            img = img.convert("RGB").resize((260, 346))
 
             w_orig, h_orig = img.size
             w, h = w_orig // 32 * 32, h_orig // 32 * 32
@@ -91,7 +92,6 @@ class VideoSequence(Sequence):
             assert (
                 self.fps > 0
             ), "Could not retrieve fps from video metadata. fps: {}".format(self.fps)
-            print("Using video metadata: Got fps of {} frames/sec".format(self.fps))
 
         # Length is number of frames - 1 (because we return pairs).
         self.len = int(metadata["video"]["@nb_frames"]) - 1
@@ -100,6 +100,8 @@ class VideoSequence(Sequence):
 
     def __next__(self):
         for idx, frame in enumerate(self.videogen):
+
+            frame = cv2.resize(frame, (260, 346))
             h_orig, w_orig, _ = frame.shape
             w, h = w_orig // 32 * 32, h_orig // 32 * 32
 

@@ -15,7 +15,7 @@ from event_library.generator import SimulatorWrapper, find_best_events_parameter
 log = logging.getLogger(__name__)
 
 
-def _do_upsample(tmp_frames_dir, tmp_upsample_dir, output_size, n_threads=12):
+def _do_upsample(tmp_frames_dir, tmp_upsample_dir, output_size, n_threads=32):
     log.info("Upsampling")
     upsample.upsample(
         tmp_frames_dir, tmp_upsample_dir, n_threads=n_threads, output_size=output_size,
