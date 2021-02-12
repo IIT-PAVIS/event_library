@@ -7,7 +7,7 @@ import numpy as np
 
 
 def get_generator(
-    events: np.array, num_events: int, frame_size: Tuple[int, int]
+    events: np.array
 ) -> np.array:
     yield events
 

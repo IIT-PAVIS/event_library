@@ -79,8 +79,8 @@ class TestRaw:
     def test_generator(self, n_generated, num_events, H, W):
         events = mock_events(n_generated, H, W)
         generator = raw.get_generator(events)
-        for event in generator:
-            assert event.shape == (4, 1)
+        events = next(generator)
+        assert events.shape == (n_generated, 4, 1)
 
 
 class TestVoxel:

@@ -59,7 +59,8 @@ def load_from_txt(file_path: str, num_events: int) -> np.array:
             num_events -= 1
 
         result = np.loadtxt(reading, dtype="float")
-        if num_events == 1:
+
+        if len(result.shape) == 1:
             # Simple trick to get 1x4 np array
             result = np.expand_dims(result, 0)
 
