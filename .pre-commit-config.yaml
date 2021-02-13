@@ -14,7 +14,7 @@ repos:
                     
       - id: black
         name: black
-        stages: [post-commit]
+        stages: [commit]
         language: system
         types: [python]
         entry: pipenv run black event_library
@@ -22,7 +22,7 @@ repos:
 
       - id: flake8
         name: flake8
-        stages: [post-commit]
+        stages: [push]
         language: system
         entry: pipenv run flake8 event_library
         types: [python]
@@ -30,7 +30,7 @@ repos:
 
       - id: mypy
         name: mypy
-        stages: [post-commit]
+        stages: [push]
         language: system
         entry: pipenv run mypy event_library
         types: [python]
