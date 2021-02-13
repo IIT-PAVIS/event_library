@@ -14,7 +14,7 @@ import event_library.utils as utils
 def accumulate_and_save(
     input_path: str, output_path: str, representation_name: str, **kwargs
 ) -> None:
-    events = utils.load_from_file(input_path, 100000)
+    events = utils.load_from_file(input_path, num_events=-1)
     os.makedirs(output_path, exist_ok=True)
     representation = representations.get_representation(representation_name)
 

@@ -6,9 +6,7 @@ from typing import Tuple
 import numpy as np
 
 
-def get_generator(
-    events: np.array
-) -> np.array:
+def get_generator(events: np.array) -> np.array:
     yield events
 
 

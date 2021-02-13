@@ -30,10 +30,10 @@ def normalized_3sigma(input_img: np.ndarray) -> np.ndarray:
 def accumulate_and_save(
     input_path: str, output_path: str, representation_name: str, **kwargs
 ) -> None:
-    events = utils.load_from_file(input_path, 1000000000000)
+    events = utils.load_from_file(input_path, num_events=-1)
     os.makedirs(output_path, exist_ok=True)
     representation = representations.get_representation(representation_name)
-    
+
     for i, frame in enumerate(representation.get_generator(events=events, **kwargs)):
         cv2.imwrite(f"{output_path}/frame{i:04d}.png", normalized_3sigma(frame))
 
