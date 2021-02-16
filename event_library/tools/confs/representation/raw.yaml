@@ -1,2 +1,4 @@
 # @package _group_
 type: raw
+args:
+  num_events: 10000

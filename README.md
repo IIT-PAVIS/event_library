@@ -39,8 +39,8 @@ sphinx-build -b html docs/source docs/build
 
 #### Example: conversion from `avi` files to `events`
 ```
-python scripts/generate.py input_dir={INPUT_DIR} output_dir={OUTPUT_DIR}
-upsample=true extract=true emulate=true representation=voxel  show_debug_images=2
+python scripts/generate.py frames_dir={INPUT_DIR} output_dir={OUTPUT_DIR}
+upsample=true emulate=true representation=voxel
 
 ```
 
@@ -89,8 +89,6 @@ You can obtain a tool help using `python {TOOL}.py --help`
 - constant-count
 - raw
 
-`extract`: if true, extract frames from `avi` files. To provide frames instead of
-videos, set 'frame_dir' instead
 
 `upsample`: if true, upsample frames to higher fps using SuperSloMo model
 

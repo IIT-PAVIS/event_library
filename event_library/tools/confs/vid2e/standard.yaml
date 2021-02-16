@@ -1,9 +1,10 @@
 # @package _group_
 _target_: event_library.generator.SimulatorWrapper
 params:
-  Cp: 0.1
-  Cn: 0.1
+  Cp: 0.2
+  Cn: 0.2
   refractory_period: 1e-4
   log_eps: 1e-3
   use_log: true
-  batch_size: 3000
+  batch_size: 30000
+  

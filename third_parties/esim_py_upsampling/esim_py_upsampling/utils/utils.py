@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Union
 
 from .const import fps_filename, imgs_dirname, video_formats
-from .dataset import ImageSequence, Sequence, VideoSequence
+from .dataset import ImageSequence, Sequence, videosequence
 
 
 def is_video_file(filepath: str):
@@ -54,7 +54,4 @@ def get_sequence_or_none(dirpath: str) -> Union[None, Sequence]:
         assert video_file is not None
         return VideoSequence(video_file, fps)
     # Can be VideoSequence if there is a video file. But have to use fps from meta data.
-    video_file = get_video_file(dirpath)
-    if video_file is not None:
-        return VideoSequence(video_file)
     return None

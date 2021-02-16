@@ -14,7 +14,7 @@ def test_load_from_text():
     expected_result = np.array([[0, 0, 100, 1], [0, 1, 110, 0]])
     with patch("event_library.utils.load.open") as _file:
         _file.return_value = StringIO(txt_source)
-        events = utils.load_from_file(path, 2)
+        events = utils.load_from_file(path, num_events=2)
         _file.assert_called_once_with(path, "r")
         assert type(events) == np.ndarray
         np.testing.assert_equal(events, expected_result)
@@ -26,7 +26,7 @@ def test_load_from_text_high_n():
     expected_result = np.array([[0, 0, 100, 1], [0, 1, 110, 0]])
     with patch("event_library.utils.load.open") as _file:
         _file.return_value = StringIO(txt_source)
-        events = utils.load_from_file(path, 100)
+        events = utils.load_from_file(path, num_events=100)
         _file.assert_called_once_with(path, "r")
         assert type(events) == np.ndarray
         np.testing.assert_equal(events, expected_result)
@@ -38,7 +38,7 @@ def test_load_1_event_from_text():
     expected_result = np.array([[0, 0, 100, 1]])
     with patch("event_library.utils.load.open") as _file:
         _file.return_value = StringIO(txt_source)
-        events = utils.load_from_file(path, 1)
+        events = utils.load_from_file(path, num_events=1)
         _file.assert_called_once_with(path, "r")
         assert type(events) == np.ndarray
         np.testing.assert_equal(events, expected_result)
@@ -50,7 +50,7 @@ def test_load_n_event_from_text():
     expected_result = np.array([[0, 0, 100, 1], [0, 0, 110, 0], [0, 0, 100, 1]])
     with patch("event_library.utils.load.open") as _file:
         _file.return_value = StringIO(txt_source)
-        events = utils.load_from_file(path, 3)
+        events = utils.load_from_file(path, num_events=3)
         _file.assert_called_once_with(path, "r")
         assert type(events) == np.ndarray
         np.testing.assert_equal(events, expected_result)

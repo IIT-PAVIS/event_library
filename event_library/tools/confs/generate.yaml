@@ -1,7 +1,6 @@
 defaults:
   - representation: voxel
   - vid2e: standard
-  - extractor: ntu
   - hydra/help: generate
  
 
@@ -10,7 +9,8 @@ frames_dir:
 upsample_dir: 
 tmp_dir: ${output_dir}/tmp
 output_dir: 
+hw_type: dvs
 
-extract: false
+search: false
 upsample: false
 emulate: false

@@ -13,6 +13,7 @@ def get_generator(
     event_count_frame = np.zeros((frame_size[0], frame_size[1], 1), dtype="int")
     time_start = 0
     time_batch = 1 / frequence  # Convert from Hz
+
     for ind, event in enumerate(events):
         y = int(event[0])
         x = int(event[1])

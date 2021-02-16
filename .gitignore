@@ -2,6 +2,7 @@
 
 .idea/*
 \#*\#
+.\#*
 *~
 !.gitignore
 
@@ -67,3 +68,4 @@ config.yaml
 src/
 outputs
 /.#deploy_gitlab.sh
+*.ckpt

@@ -12,10 +12,21 @@ from esim_py import EventSimulator
 
 
 class SimulatorWrapper(EventSimulator):
-    def __init__(self, Cp, Cn, refractory_period, log_eps, use_log, batch_size=2000):
+    def __init__(
+        self,
+        Cp,
+        Cn,
+        refractory_period,
+        log_eps,
+        use_log,
+        batch_size=2000,
+        *args,
+        **kwargs
+    ):
         super(SimulatorWrapper, self).__init__(
             Cp, Cn, refractory_period, log_eps, use_log
         )
+
         self.batch_size = batch_size
         self.ts = []
         self.images_path = []
@@ -47,7 +58,7 @@ class SimulatorWrapper(EventSimulator):
 
         """
         shape = cv2.imread(self.images_path[0]).shape
-        return shape
+        return shape[:2]
 
     def __len__(self):
         return len(self.images_path) // self.batch_size + 1

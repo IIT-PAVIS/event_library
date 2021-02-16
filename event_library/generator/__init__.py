@@ -1,4 +1,4 @@
-from .extractor import *
+from .search import find_best_events_parameters
 from .simulator import SimulatorWrapper
 
 try:

@@ -1,4 +1,4 @@
 # @package _group_
 type: constant-count-fixed-batch
 args:
-  frequence: 60
+  frequence: 50
