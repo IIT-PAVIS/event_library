@@ -33,11 +33,11 @@ def _do_simulation(cfg, tmp_upsample_dir, base_output_dir):
 
     for input_video_dir in tqdm(video_dirs):
 
-        simulator.set_input_dir(input_video_dir)
         video_struct = os.path.relpath(input_video_dir, tmp_upsample_dir)
         output_dir = os.path.join(base_output_dir, video_struct)
 
         try:
+            simulator.set_input_dir(input_video_dir)
             _generate_frames_and_save(cfg, simulator, output_dir)
         except Exception as ex:
             print(ex)

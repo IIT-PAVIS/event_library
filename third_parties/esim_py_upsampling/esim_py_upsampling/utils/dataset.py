@@ -101,7 +101,7 @@ class VideoSequence(Sequence):
     def __next__(self):
         for idx, frame in enumerate(self.videogen):
 
-            frame = cv2.resize(frame, (260, 346))
+            frame = cv2.resize(frame, (0, 0), fx=0.5, fy=0.5)
             h_orig, w_orig, _ = frame.shape
             w, h = w_orig // 32 * 32, h_orig // 32 * 32
 
