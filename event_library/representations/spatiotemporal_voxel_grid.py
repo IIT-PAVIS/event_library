@@ -8,8 +8,12 @@ from matplotlib import pyplot as pl
 
 
 def get_generator(
-    events: np.array, num_events: int, frame_size: Tuple[int, int], bins: int, **kwargs
-) -> np.array:
+    events: np.ndarray,
+    num_events: int,
+    frame_size: Tuple[int, int],
+    bins: int,
+    **kwargs
+) -> np.ndarray:
     event_count_frame = np.zeros((frame_size[0], frame_size[1], bins))
     t0 = events[0][2]
     dt = events[num_events - 1][2] - t0
@@ -33,5 +37,5 @@ def get_generator(
             dt = events[end_index][2] - t0
 
 
-def display(frame: np.array):
+def display(frame: np.ndarray):
     raise NotImplementedError
