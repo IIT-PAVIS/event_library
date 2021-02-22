@@ -6,7 +6,7 @@ from typing import Iterator, Tuple
 import numpy as np
 
 
-def get_generator(events: np.array, **kwargs) -> Iterator[np.ndarray]:
+def get_generator(events: np.ndarray, **kwargs) -> Iterator[np.ndarray]:
     yield events
 
 
