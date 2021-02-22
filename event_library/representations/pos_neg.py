@@ -3,15 +3,15 @@ Implementation of `pos_neg` representation. Similar to `constant_count`, but
 keeps positive and negative events in two separated layers and apply some
 preprocessing.
 """
-from typing import Tuple
+from typing import Iterator, Tuple
 
 import numpy as np
 from matplotlib import pyplot as plt
 
 
 def get_generator(
-    events: np.array, num_events: int, frame_size: Tuple[int, int]
-) -> np.ndarray:
+    events: np.ndarray, num_events: int, frame_size: Tuple[int, int]
+) -> Iterator[np.ndarray]:
     event_frame = np.zeros((frame_size[0], frame_size[1], 3), dtype="int")
 
     for ind, event in enumerate(events):
@@ -26,6 +26,6 @@ def get_generator(
             event_frame = np.zeros_like(event_frame)
 
 
-def display(frame: np.array):
+def display(frame: np.ndarray):
     plt.imshow(frame)
     plt.show()

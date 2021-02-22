@@ -1,7 +1,7 @@
 """
 Implementation of `spatio-temporal voxel-grid` representation
 """
-from typing import Tuple
+from typing import Iterator, Tuple
 
 import numpy as np
 from matplotlib import pyplot as pl
@@ -13,7 +13,7 @@ def get_generator(
     frame_size: Tuple[int, int],
     bins: int,
     **kwargs
-) -> np.ndarray:
+) -> Iterator[np.ndarray]:
     event_count_frame = np.zeros((frame_size[0], frame_size[1], bins))
     t0 = events[0][2]
     dt = events[num_events - 1][2] - t0

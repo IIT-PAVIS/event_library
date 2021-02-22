@@ -1,7 +1,7 @@
 """
 Implementation of `constant_count` representation
 """
-from typing import Tuple
+from typing import Iterator, Tuple
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt
 
 def get_generator(
     events: np.ndarray, num_events: int, frame_size: Tuple[int, int]
-) -> np.ndarray:
+) -> Iterator[np.ndarray]:
     event_count_frame = np.zeros((frame_size[0], frame_size[1], 1), dtype="int")
 
     for ind, event in enumerate(events):

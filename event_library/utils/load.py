@@ -23,7 +23,7 @@ def load_from_file(file_path: str, **kwargs) -> np.ndarray:
     return switcher[ext](file_path, **kwargs)  # type: ignore
 
 
-def load_from_numpy(file_path: str, num_events: int = -1) -> np.array:
+def load_from_numpy(file_path: str, num_events: int = -1) -> np.ndarray:
     events = np.load(file_path, allow_pickle=True)
 
     # normalize events time starting at 0
@@ -34,7 +34,7 @@ def load_from_numpy(file_path: str, num_events: int = -1) -> np.array:
 
 def load_from_aedat_multi_cam(
     file_path: str, num_events: int, cam: int = 1
-) -> np.array:
+) -> np.ndarray:
     from aedat import import_aedat
 
     events = import_aedat({'filePathAndName': file_path})
