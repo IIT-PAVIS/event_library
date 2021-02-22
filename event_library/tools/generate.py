@@ -64,8 +64,10 @@ def _generate_frames_and_save(
             f'Cannot convert video with different sizes! Size mismatch {simulator.get_frames_dimension()}'
         )
 
-    for events_batch in tqdm(simulator):
+    if len(os.listdir(output_dir)) > 0:
+        return
 
+    for events_batch in tqdm(simulator):
         representation_gen = _get_representation_generator_from_cfg(
             cfg, hw_properties.size
         )

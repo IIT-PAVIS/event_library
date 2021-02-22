@@ -17,11 +17,11 @@ def get_generator(
         y = int(event[0])
         x = int(event[1])
         ti = event[2]
-        p = int(event[3])
+
         t = (bins - 1) / dt * (ti - t0)
 
         for tn in range(bins):
-            event_count_frame[x, y, tn] += p * max(0, 1 - abs(tn - t))
+            event_count_frame[x, y, tn] += max(0, 1 - abs(tn - t))
 
         if ind % num_events == 0:
             yield event_count_frame
