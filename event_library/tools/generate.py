@@ -18,7 +18,10 @@ log = logging.getLogger(__name__)
 def _do_upsample(tmp_frames_dir, tmp_upsample_dir, output_size, n_threads=32):
     log.info("Upsampling")
     upsample.upsample(
-        tmp_frames_dir, tmp_upsample_dir, n_threads=n_threads, output_size=output_size,
+        tmp_frames_dir,
+        tmp_upsample_dir,
+        n_threads=n_threads,
+        output_size=output_size,
     )
     log.info("Upsampling completed")
 
@@ -33,11 +36,11 @@ def _do_simulation(cfg, tmp_upsample_dir, base_output_dir):
 
     for input_video_dir in tqdm(video_dirs):
 
-        simulator.set_input_dir(input_video_dir)
         video_struct = os.path.relpath(input_video_dir, tmp_upsample_dir)
         output_dir = os.path.join(base_output_dir, video_struct)
 
         try:
+            simulator.set_input_dir(input_video_dir)
             _generate_frames_and_save(cfg, simulator, output_dir)
         except Exception as ex:
             print(ex)
@@ -64,8 +67,10 @@ def _generate_frames_and_save(
             f'Cannot convert video with different sizes! Size mismatch {simulator.get_frames_dimension()}'
         )
 
-    for events_batch in tqdm(simulator):
+    if len(os.listdir(output_dir)) > 0:
+        return
 
+    for events_batch in tqdm(simulator):
         representation_gen = _get_representation_generator_from_cfg(
             cfg, hw_properties.size
         )

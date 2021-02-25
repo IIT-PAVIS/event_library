@@ -1,15 +1,15 @@
 """
 Implementation of `constant_count` representation per fixed time batch
 """
-from typing import Tuple
+from typing import Iterator, Tuple
 
 import numpy as np
 from matplotlib import pyplot as plt
 
 
 def get_generator(
-    events: np.array, frame_size: Tuple[int, int], frequence: float
-) -> np.array:
+    events: np.ndarray, frame_size: Tuple[int, int], frequence: float
+) -> Iterator[np.ndarray]:
     event_count_frame = np.zeros((frame_size[0], frame_size[1], 1), dtype="int")
     time_start = 0
     time_batch = 1 / frequence  # Convert from Hz
@@ -26,6 +26,6 @@ def get_generator(
     yield event_count_frame
 
 
-def display(frame: np.array):
+def display(frame: np.ndarray):
     plt.imshow(frame)
     plt.show()

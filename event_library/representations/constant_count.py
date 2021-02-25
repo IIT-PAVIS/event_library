@@ -1,15 +1,15 @@
 """
 Implementation of `constant_count` representation
 """
-from typing import Tuple
+from typing import Iterator, Tuple
 
 import numpy as np
 from matplotlib import pyplot as plt
 
 
 def get_generator(
-    events: np.array, num_events: int, frame_size: Tuple[int, int]
-) -> np.array:
+    events: np.ndarray, num_events: int, frame_size: Tuple[int, int]
+) -> Iterator[np.ndarray]:
     event_count_frame = np.zeros((frame_size[0], frame_size[1], 1), dtype="int")
 
     for ind, event in enumerate(events):
@@ -21,6 +21,6 @@ def get_generator(
             event_count_frame = np.zeros_like(event_count_frame)
 
 
-def display(frame: np.array):
+def display(frame: np.ndarray):
     plt.imshow(frame)
     plt.show()

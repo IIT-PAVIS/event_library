@@ -4,7 +4,7 @@ import pytest
 from event_library import representations
 from event_library.representations import (
     constant_count,
-    constant_count_fixed_batch,
+    constant_time,
     raw,
     spatiotemporal_voxel_grid,
 )
@@ -51,7 +51,7 @@ class TestConstantCountTimeBatch:
     def test_generator(self, n_generated, num_events, H, W):
         events = mock_events(n_generated, H, W)
         time_batch = 1  # Hz
-        generator = constant_count_fixed_batch.get_generator(events, (H, W), time_batch)
+        generator = constant_time.get_generator(events, (H, W), time_batch)
         expected_frames_count = self._count_frames_in_times(events[:, 2], time_batch)
 
         count_generated_frames = 0

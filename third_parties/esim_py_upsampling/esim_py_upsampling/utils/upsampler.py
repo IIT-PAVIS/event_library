@@ -86,24 +86,26 @@ class Upsampler:
 
                     sequence_counter += 1
                     sequence = VideoSequence(os.path.join(src_absdirpath, video_file))
-                    reldirpath = os.path.relpath(src_absdirpath, src_dir)
                     video_dir = os.path.splitext(video_file)[0]
 
-                    sequences.append(
-                        Upsampler._get_sequence(
-                            sequence,
-                            os.path.join(src_absdirpath, video_dir),
-                            src_dir,
-                            dest_dir,
-                        )
+                    seq = Upsampler._get_sequence(
+                        sequence,
+                        os.path.join(src_absdirpath, video_dir),
+                        src_dir,
+                        dest_dir,
                     )
+                    if not os.path.exists(seq['dest_timestamps_filepath']):
+                        sequences.append(seq)
+
             else:
                 sequence_counter += 1
                 print("Processing sequence number {}".format(sequence_counter))
 
-                sequences.append(
-                    Upsampler._get_sequence(sequence, src_absdirpath, src_dir, dest_dir)
+                seq = Upsampler._get_sequence(
+                    sequence, src_absdirpath, src_dir, dest_dir
                 )
+                if not os.path.exists(seq['dest_timestamps_filepath']):
+                    sequences.append(seq)
         return sequences
 
     @staticmethod
@@ -131,9 +133,7 @@ class Upsampler:
         timestamps_list = list()
 
         idx = 0
-        for img_pair, time_pair in tqdm(
-            next(sequence), total=len(sequence), desc=type(sequence).__name__
-        ):
+        for img_pair, time_pair in sequence:
             img_pair = self._move_to_device(img_pair, self.device)
             I0 = torch.unsqueeze(img_pair[0], dim=0)
             I1 = torch.unsqueeze(img_pair[1], dim=0)

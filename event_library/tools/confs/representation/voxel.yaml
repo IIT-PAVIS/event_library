@@ -1,5 +1,5 @@
 # @package _group_
 type: voxel
-params:
-  bins: 8
+args:
+  bins: 4
   num_events: 7500     

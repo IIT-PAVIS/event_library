@@ -22,11 +22,11 @@ repos:
 
       - id: flake8
         name: flake8
-        stages: [push]
+        stages: [commit]
         language: system
         entry: pipenv run flake8 event_library
         types: [python]
-        exclude: setup.py
+        exclude: setup.py,third_parties
 
       - id: mypy
         name: mypy

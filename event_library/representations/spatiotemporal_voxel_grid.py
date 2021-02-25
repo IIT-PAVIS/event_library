@@ -1,15 +1,19 @@
 """
 Implementation of `spatio-temporal voxel-grid` representation
 """
-from typing import Tuple
+from typing import Iterator, Tuple
 
 import numpy as np
 from matplotlib import pyplot as pl
 
 
 def get_generator(
-    events: np.array, num_events: int, frame_size: Tuple[int, int], bins: int, **kwargs
-) -> np.array:
+    events: np.ndarray,
+    num_events: int,
+    frame_size: Tuple[int, int],
+    bins: int,
+    **kwargs
+) -> Iterator[np.ndarray]:
     event_count_frame = np.zeros((frame_size[0], frame_size[1], bins))
     t0 = events[0][2]
     dt = events[num_events - 1][2] - t0
@@ -17,11 +21,11 @@ def get_generator(
         y = int(event[0])
         x = int(event[1])
         ti = event[2]
-        p = int(event[3])
+
         t = (bins - 1) / dt * (ti - t0)
 
         for tn in range(bins):
-            event_count_frame[x, y, tn] += p * max(0, 1 - abs(tn - t))
+            event_count_frame[x, y, tn] += max(0, 1 - abs(tn - t))
 
         if ind % num_events == 0:
             yield event_count_frame
@@ -33,5 +37,5 @@ def get_generator(
             dt = events[end_index][2] - t0
 
 
-def display(frame: np.array):
+def display(frame: np.ndarray):
     raise NotImplementedError

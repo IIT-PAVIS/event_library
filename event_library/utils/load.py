@@ -13,7 +13,7 @@ import pathlib
 import numpy as np
 
 
-def load_from_file(file_path: str, **kwargs) -> np.array:
+def load_from_file(file_path: str, **kwargs) -> np.ndarray:
     ext = pathlib.Path(file_path).suffix
     switcher = {
         ".txt": load_from_txt,
@@ -23,7 +23,7 @@ def load_from_file(file_path: str, **kwargs) -> np.array:
     return switcher[ext](file_path, **kwargs)  # type: ignore
 
 
-def load_from_numpy(file_path: str, num_events: int = -1) -> np.array:
+def load_from_numpy(file_path: str, num_events: int = -1) -> np.ndarray:
     events = np.load(file_path, allow_pickle=True)
 
     # normalize events time starting at 0
@@ -34,7 +34,7 @@ def load_from_numpy(file_path: str, num_events: int = -1) -> np.array:
 
 def load_from_aedat_multi_cam(
     file_path: str, num_events: int, cam: int = 1
-) -> np.array:
+) -> np.ndarray:
     from aedat import import_aedat
 
     events = import_aedat({'filePathAndName': file_path})
@@ -50,7 +50,7 @@ def load_from_aedat_multi_cam(
     return np.stack([y[mask], x[mask], timestamps[mask], polarity[mask]], 1)
 
 
-def load_from_txt(file_path: str, num_events: int) -> np.array:
+def load_from_txt(file_path: str, num_events: int) -> np.ndarray:
     with open(file_path, "r") as file_txt:
         reading = []
 

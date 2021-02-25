@@ -1,10 +1,10 @@
 import argparse
 import os
 from datetime import datetime
-from multiprocessing.pool import ThreadPool
 
 import numpy as np
 import torch
+from tqdm.contrib import concurrent
 
 from . import SUPERSLO_CKPT
 from .utils import Upsampler
@@ -20,7 +20,6 @@ def upsample(input_dir, output_dir, output_size=None, n_threads=1):
     try:
         os.makedirs(SUPERSLO_CKPT, exist_ok=True)
         assert os.path.isdir(input_dir), "The input directory must exist"
-        assert not os.path.exists(output_dir), "The output directory must not exist"
 
         ckpt_file = os.path.join(SUPERSLO_CKPT, "SuperSloMo.ckpt")
 
@@ -31,19 +30,23 @@ def upsample(input_dir, output_dir, output_size=None, n_threads=1):
 
         # get inputs
         sequences = Upsampler.get_sequences(input_dir, output_dir)
-        Upsampler._prepare_output_dir(input_dir, output_dir)
+
+        # Upsampler._prepare_output_dir(input_dir, output_dir)
         # pool of threads
         def _upsample_sequence(seq):
             device_id = get_freer_gpu()
             device = torch.device(f"cuda:{device_id}")
+
+            if os.path.exists(seq['dest_timestamps_filepath']):
+                return
             return Upsampler(device=device, ckpt_file=ckpt_file).upsample_sequence(
                 **seq, output_size=output_size
             )
 
-        with ThreadPool(n_threads) as pool:
-            start = datetime.now()
-            pool.map(_upsample_sequence, sequences)
-            print(f"Total time: {datetime.now() - start}")
+        start = datetime.now()
+        concurrent.thread_map(_upsample_sequence, sequences)
+
+        print(f"Total time: {datetime.now() - start}")
     except Exception as ex:  # noqa: E722
         print(ex)
         print(

@@ -18,13 +18,7 @@ from typing import Any, Callable, Iterable
 
 import numpy as np
 
-from . import (
-    constant_count,
-    constant_count_fixed_batch,
-    pos_neg,
-    raw,
-    spatiotemporal_voxel_grid,
-)
+from . import constant_count, constant_time, pos_neg, raw, spatiotemporal_voxel_grid
 
 
 def get_representation(representation_type: str):
@@ -38,7 +32,7 @@ def get_representation(representation_type: str):
         "voxel": spatiotemporal_voxel_grid,
         "raw": raw,
         "pos-neg": pos_neg,
-        "constant-count-fixed-batch": constant_count_fixed_batch,
+        "constant-time": constant_time,
     }
 
     return switcher[representation_type]
@@ -61,7 +55,7 @@ def get_generator(
 
     """
 
-    def _generator(events: np.array):
+    def _generator(events: np.ndarray):
         return get_representation(representation_type).get_generator(events, **kwargs)
 
     return _generator
