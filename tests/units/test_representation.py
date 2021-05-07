@@ -3,14 +3,15 @@ import pytest
 
 from event_library import representations
 from event_library.representations import (
-    constant_count,
-    constant_time,
-    raw,
-    spatiotemporal_voxel_grid,
+    ConstantCount,
+    ConstantTime,
+    PosNeg,
+    Raw,
+    VoxelGrid,
 )
 
 
-def mock_events(n_events, H, W) -> np.array:
+def mock_events(n_events, H, W) -> np.ndarray:
     widths = np.random.randint(0, W, (n_events, 1))
     heights = np.random.randint(0, H, (n_events, 1))
     polarities = np.random.choice([-1, 1], (n_events, 1))
@@ -21,13 +22,19 @@ def mock_events(n_events, H, W) -> np.array:
 
 class TestSwitches:
     def test_constant_count(self):
-        assert representations.get_representation("constant-count") == constant_count
+        assert representations.get_representation("constant-count") == ConstantCount
+
+    def test_pos_neg(self):
+        assert representations.get_representation("pos-neg") == PosNeg
 
     def test_raw(self):
-        assert representations.get_representation("raw") == raw
+        assert representations.get_representation("raw") == Raw
+
+    def test_constant_time(self):
+        assert representations.get_representation("constant-time") == ConstantTime
 
     def test_voxel(self):
-        assert representations.get_representation("voxel") == spatiotemporal_voxel_grid
+        assert representations.get_representation("voxel") == VoxelGrid
 
 
 class TestConstantCount:
@@ -37,13 +44,13 @@ class TestConstantCount:
     )
     def test_generator(self, n_generated, num_events, H, W):
         events = mock_events(n_generated, H, W)
-        generator = constant_count.get_generator(events, num_events, (H, W))
+        generator = ConstantCount(num_events, (H, W)).get_generator(events)
 
         for event_frame in generator:
             assert event_frame.shape == (H, W, 1)
 
 
-class TestConstantCountTimeBatch:
+class TestConstantTime:
     @pytest.mark.parametrize(
         "n_generated,num_events,H,W",
         [(1000, 100, 200, 300), (2000, 10, 100, 200), (5000, 100, 10, 200)],
@@ -51,7 +58,7 @@ class TestConstantCountTimeBatch:
     def test_generator(self, n_generated, num_events, H, W):
         events = mock_events(n_generated, H, W)
         time_batch = 1  # Hz
-        generator = constant_time.get_generator(events, (H, W), time_batch)
+        generator = ConstantTime(num_events, (H, W), time_batch).get_generator(events)
         expected_frames_count = self._count_frames_in_times(events[:, 2], time_batch)
 
         count_generated_frames = 0
@@ -78,7 +85,7 @@ class TestRaw:
     )
     def test_generator(self, n_generated, num_events, H, W):
         events = mock_events(n_generated, H, W)
-        generator = raw.get_generator(events)
+        generator = Raw().get_generator(events)
         events = next(generator)
         assert events.shape == (n_generated, 4, 1)
 
@@ -90,9 +97,7 @@ class TestVoxel:
     )
     def test_generator(self, n_generated, num_events, H, W, bins):
         events = mock_events(n_generated, H, W)
-        generator = spatiotemporal_voxel_grid.get_generator(
-            events, num_events, (H, W), bins
-        )
+        generator = VoxelGrid(num_events, (H, W), bins).get_generator(events)
 
         for event_frame in generator:
             assert event_frame.shape == (H, W, bins)

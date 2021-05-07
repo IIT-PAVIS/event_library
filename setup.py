@@ -67,6 +67,7 @@ setuptools.setup(
         "numpy",
         "torch",
         "snntoolbox",
+        "hyperopt",
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

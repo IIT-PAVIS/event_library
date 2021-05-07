@@ -4,38 +4,41 @@ Implementation of `spatio-temporal voxel-grid` representation
 from typing import Iterator, Tuple
 
 import numpy as np
-from matplotlib import pyplot as pl
+
+from .base import BaseRepresentation
 
 
-def get_generator(
-    events: np.ndarray,
-    num_events: int,
-    frame_size: Tuple[int, int],
-    bins: int,
-    **kwargs
-) -> Iterator[np.ndarray]:
-    event_count_frame = np.zeros((frame_size[0], frame_size[1], bins))
-    t0 = events[0][2]
-    dt = events[num_events - 1][2] - t0
-    for ind, event in enumerate(events):
-        y = int(event[0])
-        x = int(event[1])
-        ti = event[2]
+class VoxelGrid(BaseRepresentation):
+    def __init__(self, num_events: int, frame_size: Tuple[int, int], bins=4):
+        super().__init__()
+        self.frame_size = frame_size
+        self.num_events = num_events
+        self.bins = bins
 
-        t = (bins - 1) / dt * (ti - t0)
+    def get_generator(
+        self,
+        events: np.ndarray,
+    ) -> Iterator[np.ndarray]:
+        event_count_frame = np.zeros(
+            (self.frame_size[0], self.frame_size[1], self.bins)
+        )
+        t0 = events[0][2]
+        dt = events[self.num_events - 1][2] - t0
+        for ind, event in enumerate(events):
+            y = int(event[0])
+            x = int(event[1])
+            ti = event[2]
 
-        for tn in range(bins):
-            event_count_frame[x, y, tn] += max(0, 1 - abs(tn - t))
+            t = (self.bins - 1) / dt * (ti - t0)
 
-        if ind % num_events == 0:
-            yield event_count_frame
-            event_count_frame = np.zeros_like(event_count_frame)
-            t0 = events[ind][2]
+            for tn in range(self.bins):
+                event_count_frame[x, y, tn] += max(0, 1 - abs(tn - t))
 
-            # Next frame has size self.num_events
-            end_index = min(len(events) - 1, ind + num_events - 1)
-            dt = events[end_index][2] - t0
+            if ind % self.num_events == 0:
+                yield event_count_frame
+                event_count_frame = np.zeros_like(event_count_frame)
+                t0 = events[ind][2]
 
-
-def display(frame: np.ndarray):
-    raise NotImplementedError
+                # Next frame has size self.num_events
+                end_index = min(len(events) - 1, ind + self.num_events - 1)
+                dt = events[end_index][2] - t0

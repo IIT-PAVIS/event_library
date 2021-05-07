@@ -6,26 +6,23 @@ preprocessing.
 from typing import Iterator, Tuple
 
 import numpy as np
-from matplotlib import pyplot as plt
+
+from .base import BaseRepresentation
 
 
-def get_generator(
-    events: np.ndarray, num_events: int, frame_size: Tuple[int, int]
-) -> Iterator[np.ndarray]:
-    event_frame = np.zeros((frame_size[0], frame_size[1], 3), dtype="int")
+class PosNeg(BaseRepresentation):
+    def __init__(self, num_events: int, frame_size: Tuple[int, int]):
+        super().__init__()
+        self.frame_size = frame_size
+        self.num_events = num_events
 
-    for ind, event in enumerate(events):
-        y = int(event[0])
-        x = int(event[1])
-        p = int(event[3]) > 0
-        event_frame[x, y, p] += 1
-
-        if ind % num_events == 0:
+    def get_generator(self, events: np.ndarray) -> Iterator[np.ndarray]:
+        event_frame = np.zeros((self.frame_size[0], self.frame_size[1], 3), dtype="int")
+        for ind, event in enumerate(events):
+            y = int(event[0])
+            x = int(event[1])
+            p = int(event[3]) > 0
+            event_frame[x, y, p] += 1
             event_frame *= 50
             yield event_frame
             event_frame = np.zeros_like(event_frame)
-
-
-def display(frame: np.ndarray):
-    plt.imshow(frame)
-    plt.show()
