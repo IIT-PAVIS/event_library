@@ -5,10 +5,12 @@ from typing import Iterator, Tuple
 
 import numpy as np
 
-
-def get_generator(events: np.ndarray, **kwargs) -> Iterator[np.ndarray]:
-    yield events
+from .base import BaseRepresentation
 
 
-def display(frame: np.ndarray):
-    raise NotImplementedError()
+class Raw(BaseRepresentation):
+    def __init__(self):
+        super().__init__()
+
+    def get_generator(self, events: np.ndarray) -> Iterator[np.ndarray]:
+        yield events

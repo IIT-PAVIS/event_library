@@ -4,23 +4,24 @@ Implementation of `constant_count` representation
 from typing import Iterator, Tuple
 
 import numpy as np
-from matplotlib import pyplot as plt
+
+from .base import BaseRepresentation
 
 
-def get_generator(
-    events: np.ndarray, num_events: int, frame_size: Tuple[int, int]
-) -> Iterator[np.ndarray]:
-    event_count_frame = np.zeros((frame_size[0], frame_size[1], 1), dtype="int")
+class ConstantCount(BaseRepresentation):
+    def __init__(self, num_events: int, frame_size: Tuple[int, int]):
+        super().__init__()
+        self.frame_size = frame_size
+        self.num_events = num_events
 
-    for ind, event in enumerate(events):
-        y = int(event[0])
-        x = int(event[1])
-        event_count_frame[x, y] += 1
-        if ind % num_events == 0:
-            yield event_count_frame
-            event_count_frame = np.zeros_like(event_count_frame)
-
-
-def display(frame: np.ndarray):
-    plt.imshow(frame)
-    plt.show()
+    def get_generator(self, events: np.ndarray) -> Iterator[np.ndarray]:
+        event_count_frame = np.zeros(
+            (self.frame_size[0], self.frame_size[1], 1), dtype="int"
+        )
+        for ind, event in enumerate(events):
+            y = int(event[0])
+            x = int(event[1])
+            event_count_frame[x, y] += 1
+            if ind % self.num_events == 0:
+                yield event_count_frame
+                event_count_frame = np.zeros_like(event_count_frame)

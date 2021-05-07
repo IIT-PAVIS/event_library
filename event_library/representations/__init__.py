@@ -18,7 +18,12 @@ from typing import Any, Callable, Iterable
 
 import numpy as np
 
-from . import constant_count, constant_time, pos_neg, raw, spatiotemporal_voxel_grid
+from .base import BaseRepresentation
+from .constant_count import ConstantCount
+from .pos_neg import PosNeg
+from .raw import Raw
+from .spatiotemporal_voxel_grid import VoxelGrid
+from .time_count import ConstantTime
 
 
 def get_representation(representation_type: str):
@@ -28,11 +33,11 @@ def get_representation(representation_type: str):
     """
 
     switcher = {
-        "constant-count": constant_count,
-        "voxel": spatiotemporal_voxel_grid,
-        "raw": raw,
-        "pos-neg": pos_neg,
-        "constant-time": constant_time,
+        "constant-count": ConstantCount,
+        "voxel": VoxelGrid,
+        "raw": Raw,
+        "pos-neg": PosNeg,
+        "constant-time": ConstantTime,
     }
 
     return switcher[representation_type]
